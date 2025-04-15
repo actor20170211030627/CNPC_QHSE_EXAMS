@@ -1,0 +1,5 @@
+*.iml
+/.git
+/.gradle
+/.idea
+local.properties
