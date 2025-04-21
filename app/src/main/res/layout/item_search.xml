@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    tools:context=".adapter.SearchAdapter">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_333"
+        android:textSize="15sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_999"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_subject"
+        tools:text="（A）马路；\n
+（B）铁路；\n
+（C）公路；\n
+（D）公安机关交通管理部门；       //可能没有D选项" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red_D90000"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_options"
+        tools:text="答案：C" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_analysis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_999"
+        android:textSize="13sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_subject"
+        tools:text="解析：持有境外机动车驾驶证的人，符合国务院公安部门规定的驾驶许可条件，经公安机关交通管理部门考核合格的，可以发给中国的机动车驾驶证。" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:background="#DDDDDD"
+        app:layout_constraintTop_toBottomOf="@id/tv_analysis" />
+</androidx.appcompat.widget.LinearLayoutCompat>

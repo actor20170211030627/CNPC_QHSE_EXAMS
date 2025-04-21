@@ -1,5 +1,47 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-plugins {
-    id 'com.android.application' version '7.4.1' apply false
-    id 'com.android.library' version '7.4.1' apply false
+//plugins {
+//    id 'com.android.application' version '7.4.1' apply false
+//    id 'com.android.library' version '7.4.1' apply false
+////    id 'org.greenrobot:greendao-gradle-plugin' version '3.3.0' apply false
+//}
+
+buildscript {
+    ext {
+        version_code = 276
+        version_name = "2.7.6"
+        // Project build Android SDK version number configuration.
+        min_sdk_version = 21
+        compile_sdk_version = 33
+        target_sdk_version = 33
+
+        // Project build dependencies version number configuration.
+        appcompat = '1.5.1'
+        material = "1.6.1"
+        collection_ktx = '1.1.0'
+    }
+    repositories {
+        mavenLocal()
+        maven { url 'D://repository' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+        google()
+    }
+    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+//        classpath 'com.huawei.agconnect:agcp:1.7.3.300'
+
+        classpath("org.greenrobot:greendao-gradle-plugin:3.3.0")
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

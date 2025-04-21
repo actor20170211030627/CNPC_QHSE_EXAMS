@@ -1,52 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.hjq.shape.layout.ShapeConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".activity.MainActivity">
-
-    <!--    <com.actor.myandroidframework.widget.StatusBarHeightView-->
-    <!--        android:id="@+id/status_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    android:layout_height="wrap_content"
+    app:shape_radius="20dp"
+    app:shape_solidColor="#eee"
+    app:shape_strokeColor="@color/black"
+    app:shape_strokeSize="1dp"
+    tools:context=".global.EasyWindowSubjects">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
-        android:adjustViewBounds="true"
-        android:padding="18dp"
-        android:src="@drawable/icon_arrow_left_black2"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="中石油题库 - 驾驶员"
-        android:textColor="#ff000000"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/iv_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_back" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
-        android:adjustViewBounds="true"
-        android:padding="16dp"
-        android:src="@drawable/icon_setting"
+        android:id="@+id/iv_close"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:padding="10dp"
+        android:src="@drawable/icon_close_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <com.hjq.shape.view.ShapeEditText
         android:id="@+id/set_search"
@@ -83,7 +54,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/set_search"
-        app:layout_constraintTop_toBottomOf="@id/iv_back"
+        app:layout_constraintTop_toBottomOf="@id/iv_close"
         app:shape_radius="5dp"
         app:shape_solidColor="@color/red_D90000" />
 
@@ -113,9 +84,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bs_chapters"
         tools:listitem="@layout/item_search" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.hjq.shape.layout.ShapeConstraintLayout>
