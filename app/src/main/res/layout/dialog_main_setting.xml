@@ -46,7 +46,8 @@
         android:text="显示解析:"
         android:textColor="#ff3d3d3d"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@id/tv_show_screen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stv" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -59,9 +60,11 @@
         android:text="显示悬浮窗:"
         android:textColor="#ff3d3d3d"
         android:textSize="15sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show_analysis" />
+        app:layout_constraintTop_toBottomOf="@id/tv_show_analysis"
+        tools:visibility="visible" />
 
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_cancel"

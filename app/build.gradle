@@ -16,8 +16,8 @@ android {
         applicationId "com.actor.cnpc_qhse_exams"
         minSdk 24
         targetSdk 33
-        versionCode 20250421
-        versionName "1.0"
+        versionCode 20250422
+        versionName "1.1"
     }
 
     compileOptions {
@@ -35,7 +35,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -48,6 +48,12 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
+            if (variant.buildType.name == 'release') {  //release版本
+                variant.mergeAssets.doLast {
+                    //打正式包时, 排除测试文件
+                    delete(fileTree(dir: variant.mergeAssets.outputDir, includes: ['*.txt']))
+                }
+            }
             outputFileName = "TiKu_v${variant.versionName}_${variant.flavorName}_${buildTime()}_${variant.buildType.name}.apk"
         }
     }
@@ -77,8 +83,9 @@ dependencies {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.github.bumptech.glide', module: 'glide'
+        exclude group: 'com.github.getActivity', module: 'XXPermissions'
         exclude group: 'com.github.getActivity', module: 'EasyHttp'
-//        exclude group: 'com.tencent', module: 'mmkv-static'
+        exclude group: 'com.tencent', module: 'mmkv-static'
         exclude group: 'com.github.li-xiaojun', module: 'XPopup'
     }
     //图片选择
@@ -90,7 +97,7 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.3.0' // add library
 
     // 悬浮窗框架：https://github.com/getActivity/EasyWindow
-    implementation 'com.github.getActivity:EasyWindow:11.3'
+//    implementation 'com.github.getActivity:EasyWindow:11.3'
 
 
 

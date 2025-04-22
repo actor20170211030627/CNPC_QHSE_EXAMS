@@ -48,13 +48,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <!--android:drawableEnd="@drawable/icon_search_gray"
+    -->
     <com.hjq.shape.view.ShapeEditText
         android:id="@+id/set_search"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="10dp"
-        android:drawableEnd="@drawable/icon_search_gray"
         android:gravity="center_vertical"
         android:hint="请输入要查询的题目"
         android:imeOptions="actionSearch"
@@ -71,6 +72,16 @@
         app:shape_radius="4dp"
         app:shape_strokeColor="#D2D2D2"
         app:shape_strokeSize="1dp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_close"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:padding="10dp"
+        android:src="@drawable/icon_close_black"
+        app:layout_constraintBottom_toBottomOf="@id/set_search"
+        app:layout_constraintEnd_toEndOf="@id/set_search"
+        app:layout_constraintTop_toTopOf="@id/set_search" />
 
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_search"

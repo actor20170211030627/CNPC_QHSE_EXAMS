@@ -6,10 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.actor.cnpc_qhse_exams.databinding.DialogMainSettingBinding;
-import com.actor.cnpc_qhse_exams.global.EasyWindowSubjects;
 import com.actor.myandroidframework.dialog.ViewBindingDialog;
 import com.blankj.utilcode.util.SizeUtils;
-import com.hjq.window.EasyWindow;
 
 /**
  * description: 描述
@@ -21,8 +19,8 @@ import com.hjq.window.EasyWindow;
  */
 public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBinding> {
 
-    private boolean isShowAnalysis;
-    private OnConfirmClickListener listener;
+    private final boolean                isShowAnalysis;
+    private final OnConfirmClickListener listener;
 
     public MainSettingDialog(@NonNull Context context, boolean isShowAnalysis, @NonNull OnConfirmClickListener listener) {
         super(context);
@@ -54,7 +52,7 @@ public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBindin
         });
 
         viewBinding.tvShowAnalysis.setSelected(isShowAnalysis);
-        viewBinding.tvShowScreen.setSelected(EasyWindow.existWindowShowingByClass(EasyWindowSubjects.class));
+//        viewBinding.tvShowScreen.setSelected(EasyWindow.existWindowShowingByClass(EasyWindowSubjects.class));
     }
 
     public interface OnConfirmClickListener {

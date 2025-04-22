@@ -1,5 +1,6 @@
 package com.actor.cnpc_qhse_exams.bean;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -15,6 +16,7 @@ import org.greenrobot.greendao.annotation.Transient;
  * date       : 2025/4/20 on 14
  * @version 1.0
  */
+@Keep
 @Entity(nameInDb = "SUBJECT_DRIVER",  //这个实体类会在数据库中生成对应的表, 默认是大写并用_分开
         createInDb = true,            //如果数据库里没有这张表, 就在数据库里创建
         generateGettersSetters = true,//如果写成false, Dao里面的方法会报错...
