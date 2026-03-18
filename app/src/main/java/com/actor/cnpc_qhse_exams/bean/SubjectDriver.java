@@ -49,8 +49,10 @@ public class SubjectDriver {
      * 43: 第四章 安全行车注意事项   三、判断题
      * 51: 第五章 防御性驾驶        一、单选题
      * 52: 无
-     * 53: 第五章 防御性驾驶        三、判断题
+     * 53: 第五章 防御性驾驶        二、判断题
      * 61: 第六章 风险控制          一、单选题
+     * 62: 无
+     * 63: 无
      * 71: 第七章 应急处置          一、单选题
      * 72: 第七章 应急处置          二、多选题
      * 73: 第七章 应急处置          三、判断题
@@ -64,6 +66,12 @@ public class SubjectDriver {
      * 三、判断题
      */
     private int subjectType;
+
+    /**
+     * 考核点
+     */
+    @Nullable
+    private String testPoint;
 
     /**
      * 题目
@@ -99,13 +107,13 @@ public class SubjectDriver {
     public SubjectDriver() {
     }
 
-    public SubjectDriver(int chapterType, int subjectType, @NotNull @NonNull String subject,
-                         @Nullable String options,
-                         @NotNull @NonNull String answer,
-                         @Nullable String analysis
+    public SubjectDriver(int chapterType, int subjectType, @Nullable String testPoint,
+                         @NotNull @NonNull String subject, @Nullable String options,
+                         @NotNull @NonNull String answer, @Nullable String analysis
     ) {
         this.chapterType = chapterType;
         this.subjectType = subjectType;
+        this.testPoint = testPoint;
         this.subject = subject;
         this.options = options;
         this.answer = answer;
@@ -166,5 +174,13 @@ public int getSubjectType() {
 
 public void setSubjectType(int subjectType) {
     this.subjectType = subjectType;
+}
+
+public String getTestPoint() {
+    return this.testPoint;
+}
+
+public void setTestPoint(String testPoint) {
+    this.testPoint = testPoint;
 }
 }

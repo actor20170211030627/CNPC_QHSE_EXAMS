@@ -1,15 +1,18 @@
 package com.actor.cnpc_qhse_exams.utils;
 
-import android.text.TextUtils;
+import androidx.annotation.Nullable;
 
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
+import com.actor.myandroidframework.utils.LogUtils;
 import com.actor.myandroidframework.utils.TextUtils2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * description: 单选/多选 / 选择题
+ * description: 单选题/多选题 / 判断题
  * company    :
  *
  * @author : ldf
@@ -19,7 +22,8 @@ import java.util.List;
 public class SubjectReadUtils {
 
     /**
-     * 单选题
+     * 单选题/多选题
+     *
      * 1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。
      * （A）马路；
      * （B）铁路；
@@ -27,63 +31,109 @@ public class SubjectReadUtils {
      * （D）公安机关交通管理部门；       //可能没有D选项
      * 答案：C
      * 解析：《驾驶员初级理论知识试题》 //大部分没有解析
+     *
+     *
+     * 1.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
+     * 当驾驶操作效果与驾驶员的意志产生偏差时，感觉器官又将这些误差的新信息输送到大脑，
+     * 这种机能称为（   ）。
+     * （A）反射；
+     * （B）幻觉；
+     * （C）本能；
+     * （D）反馈；
+     * 答文：D
+     * 解析：
      */
     public static List<SubjectDriver> read2SelectList(List<String> list, int chapterType, int subjectType) {
-        String subject = null;
+        //考核点                  标题号             标题             标题里的答案
+        String testPoint = null, subjectNum = null, subject = null, answerInSubject = null;
+        //是否已经解析选项
+        boolean isParseOption = false;
         StringBuilder sb = new StringBuilder();
+        //选项: A~G
         List<String> options = new ArrayList<>(7);
         List<SubjectDriver> subjects = new ArrayList<>(200);
 
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
 
-            if (judgeEmpty(item)) continue;
+            if (item.equals("146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。")) {
+                System.out.println(1111);
+            }
 
-            item = item.trim();
-
-            //标题                    答案那儿subject = null, 所以这儿要判断是否是解析
-            if (subject == null && !item.startsWith("解析：")) {
-                judgeSubject(item, i);
-                subject = item;
+            //考核点
+            if (testPoint == null && isTestPoint(item)) {
+                testPoint = getTestPoint(item, list.get(i + 1));
+                subjectNum = getSubjectNum(item);
+                continue;
+            }
+            //是否是选项
+            boolean isOption = isOption(item);
+            //是否是答案
+            String answer = getAnswer(item);
+            /**
+             * 是否是选项的下一行 (1个选项有可能是2行)
+             * 要先判断是否是答案, 因为答案的上面也是选项
+             * 标题的上面也有可能是选项, 例:
+             *     145、高速公路上停车检修时应在（ D ）放置警示牌。
+             *     （A）车前 100 米 （B）车后 100 米 （C）车前 150 米   （D）车后 150 米
+             *     146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。  //← 这1行
+             */
+            boolean isOptionNext = answer == null && !isSubject(item) && isOption(list.get(i - 1));
+            //是否是解析
+            boolean isParse = isParse(item);
+            //标题(有可能是多行)                                  答案那儿subject = null, 所以这儿要判断是否是解析
+            if (!isParseOption && !isOption && !isOptionNext && !isParse) {
+                answerInSubject = getAnswerInSubject(item);
+                if (subject == null) {
+                    if (subjectNum == null) {
+                        subject = item;
+                    } else subject = subjectNum + item;
+                } else {
+                    LogUtils.errorFormat("请确认这是标题的一部分(而不是选项): %s", item);
+                    subject = subject + item;
+                }
                 continue;
             }
             //选项
-            if (item.startsWith("（A）") || item.startsWith("（B）")
-                    || item.startsWith("（C）") || item.startsWith("（D）")
-                    || item.startsWith("（E）") || item.startsWith("（F）")
-                    || item.startsWith("（G）")
-                    || item.startsWith("C") //"C机动车和非机动车       （D）汽车和拖拉机"
-                    || item.startsWith("A") //"A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下"
-                    || item.startsWith("D") //"D  挤靠“加塞”车辆，逼其离开"
-            ) {
+            if (isOption) {
                 options.add(item);
+                isParseOption = true;
+                // if题目里有答案(这道题可能没有明确答案, 答案在标题里), 就需要判断下一行是否是选项,
+                if (answerInSubject == null) continue;
+                //判断下一行是否是选项, if下一行不是选项, 直接走答案的判断(因为有些题目没有答案, 答案在标题里面)
+                boolean isNextOption = isOption(list.get(i + 1));
+                if (isNextOption) continue;
+            } else if (isOptionNext) {
+                if (options.isEmpty()) {
+                    LogUtils.errorFormat("options为空, item = %s", item);
+                }
+                options.set(options.size() - 1, options.get(options.size() - 1) + item);
+                isParseOption = true;
                 continue;
             }
             //答案
-            if (item.startsWith("答案：")) {
-                if (subject == null) {
-                    throw new IllegalStateException(TextUtils2.getStringFormat("没有读取到标题: %d 行, 字符串: %s", i, item));
+            if (answer == null) answer = answerInSubject;
+            if (answer != null) {
+                if (subject == null || options.isEmpty()) {
+                    throw new IllegalStateException(TextUtils2.getStringFormat("没有读取到标题 or 选项: 字符串: %s, options.size() = %d", item, options.size()));
                 }
                 for (int i1 = 0; i1 < options.size(); i1++) {
                     sb.append(options.get(i1));
                     if (i1 < options.size() - 1) sb.append("\n");
                 }
-                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, subject, sb.toString(), item, null);
+                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, testPoint, subject, sb.toString(), answer, null);
                 subjects.add(sd);
 
-                subject = null;
+                testPoint = subjectNum = subject = answerInSubject = null;
+                isParseOption = false;
                 sb.setLength(0);
                 options.clear();
                 continue;
             }
-            //解析
-            if (item.startsWith("解析：")) {
-                if (subjects.isEmpty()) {
-                    throw new IllegalStateException(TextUtils2.getStringFormat("为什么先把解析读取出来了? : %d 行, 字符串: %s", i, item));
-                } else {
-                    subjects.get(subjects.size() - 1).setAnalysis(item);
-                    continue;
-                }
+            //解析(不一定有解析)
+            if (isParse) {
+                subjects.get(subjects.size() - 1).setAnalysis(item);
+                continue;
             }
 
             throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 未知类型字符串: %s", i, item));
@@ -92,69 +142,62 @@ public class SubjectReadUtils {
     }
 
     /**
-     * 选择题
+     * 判断题
+     *
      * 3.实习驾驶员可以试车。
      * 答案：错误
      * 解析：实习驾驶员不可以试车。   //可能没有解析
+     *
+     * 1.【考核点：层级+专业；题型：判断题；难度：易；类型：基础】
+     * 患心肌梗塞、严重高血压、传染病等疾病的人、怀孕 8 个月以上的孕妇及不到 2 周的新生儿
+     * 均不宜乘坐飞机。
+     * 答文：正确
+     * 解析：
      */
     public static List<SubjectDriver> read2Judges(List<String> list, int chapterType, int subjectType) {
-        String subject = null;
-//        StringBuilder sb = new StringBuilder();
-//        List<String> options = new ArrayList<>(4);
+        //考核点                  标题号             标题
+        String testPoint = null, subjectNum = null, subject = null;
         List<SubjectDriver> subjects = new ArrayList<>(60);
 
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
-
-            if (judgeEmpty(item)) continue;
-
-            item = item.trim();
-
-            //标题                    答案那儿subject = null, 所以这儿要判断是否是解析
-            if (subject == null && !item.startsWith("解析：")) {
-                judgeSubject(item, i);
-                subject = item;
+            //考核点
+            if (testPoint == null && isTestPoint(item)) {
+                testPoint = getTestPoint(item, list.get(i + 1));
+                subjectNum = getSubjectNum(item);
                 continue;
             }
-            //选项
-//            if (item.startsWith("（A）") || item.startsWith("（B）")
-//                    || item.startsWith("（C）") || item.startsWith("（D）")
-//                    || item.startsWith("（E）") || item.startsWith("（F）")
-//                    || item.startsWith("（G）")
-//                    || item.startsWith("C") //"C机动车和非机动车       （D）汽车和拖拉机"
-//                    || item.startsWith("A") //"A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下"
-//                    || item.startsWith("D") //"D  挤靠“加塞”车辆，逼其离开"
-//            ) {
-//                options.add(item);
-//                continue;
-//            }
+            //是否是答案
+            String answer = getAnswer(item);
+            //是否是解析
+            boolean isParse = isParse(item);
+            //标题(有可能是多行)                 答案那儿subject = null, 所以这儿要判断是否是解析
+            if (answer == null && !isParse) {
+                if (subject == null) {
+                    if (subjectNum == null) {
+                        subject = item;
+                    } else subject = subjectNum + item;
+                } else {
+                    LogUtils.errorFormat("请确认这是标题的一部分(而不是选项): %s", item);
+                    subject = subject + item;
+                }
+                continue;
+            }
             //答案
-            if (item.startsWith("答案：")) {
+            if (answer != null) {
                 if (subject == null) {
                     throw new IllegalStateException(TextUtils2.getStringFormat("没有读取到标题: %d 行, 字符串: %s", i, item));
                 }
-//                for (int i1 = 0; i1 < options.size(); i1++) {
-//                    sb.append(options.get(i1));
-//                    if (i1 < options.size() - 1) sb.append("\n");
-//                }
-
-//                SubjectDriver sd = new SubjectDriver(type, subject, sb.toString(), item, null);
-                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, subject, null, item, null);
+                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, testPoint, subject, null, answer, null);
                 subjects.add(sd);
 
-                subject = null;
-//                sb.setLength(0);
-//                options.clear();
+                testPoint = subjectNum = subject = null;
                 continue;
             }
             //解析
-            if (item.startsWith("解析：")) {
-                if (subjects.isEmpty()) {
-                    throw new IllegalStateException(TextUtils2.getStringFormat("为什么先把解析读取出来了? : %d 行, 字符串: %s", i, item));
-                } else {
-                    subjects.get(subjects.size() - 1).setAnalysis(item);
-                    continue;
-                }
+            if (isParse) {
+                subjects.get(subjects.size() - 1).setAnalysis(item);
+                continue;
             }
 
             throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 未知类型字符串: %s", i, item));
@@ -171,20 +214,142 @@ public class SubjectReadUtils {
     }
 
     /**
-     * 判断标题, if不是标题就报错
+     * 获取考核点
+     * 1.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
      */
-    public static void judgeSubject(String item, int lineNum) {
-        //25、雨天行车，遇撑雨伞和穿雨衣的行人在公路上行走时，按照防御性驾驶技术要求，要引人注意、留有余地，应当（    ），谨慎通行。
-        //134、轮胎胎纹低于0.5MM时应（     ）
-        String[] split = item.substring(0, 5).split("\\.");
-        if (split.length < 2) {
-            split = item.split("、");
-            if (split.length < 2) {
-                throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 不包含'.' or '、': %s", lineNum, item));
-            }
+    public static String getTestPoint(String item, String nextItem) {
+        String[] splits = item.split("考核点：")[1].split("】");
+        String testPoint = splits[0];
+        if (testPoint.isEmpty()) {
+            throw new IllegalStateException(TextUtils2.getStringFormat("【考核点】读取有问题: %s, 下一行: %s", item, nextItem));
         }
-        if (!TextUtils.isDigitsOnly(split[0])) {
-            throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 不是以数字开头: %s", lineNum, item));
+        //splits.length默认=1, if>1【考核点】后面有内容
+        if (splits.length > 1 && !splits[1].isEmpty()) {
+            throw new IllegalStateException(TextUtils2.getStringFormat("【考核点】后面有内容, 是标题??: %s, 下一行: %s", splits[1], nextItem));
         }
+        return testPoint;
+    }
+
+    /**
+     * ^     行开头
+     * \\d+  匹配数字（1 位、2 位、3 位都可以：1、10、141）
+     * [.、] 匹配 . 或者 、 两种符号
+     */
+    private static final Pattern REGEX_SUBJECT_NUM = Pattern.compile("^\\d+[.、]");
+    /**
+     * 获取标题号, if不是标题就报错
+     * @return 1. or 1、 or null
+     */
+    @Nullable
+    public static String getSubjectNum(String item) {
+        Matcher matcher = REGEX_SUBJECT_NUM.matcher(item);
+        if (matcher.find()) return matcher.group();
+        return null;
+    }
+
+    /**
+     * 是否是标题
+     * @return true, false
+     */
+    public static boolean isSubject(String item) {
+        Matcher matcher = REGEX_SUBJECT_NUM.matcher(item);
+//        return matcher.matches(); //完美匹配
+        return matcher.find();
+    }
+
+    /**
+     * 是否是考核点
+     * @param item
+     * @return 是否是考核点
+     */
+    public static boolean isTestPoint(String item) {
+        return item.contains("【考核点");
+    }
+
+    /**
+     *  正则：匹配（A/B/C/D/E/F/G）     开头 or
+     *       匹配  A/B/C/D/E/F/G       开头 or
+     *       匹配  Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ  开头 or
+     *       匹配（Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ）开头
+     *       .* 表示后面可以跟任意内容
+     */
+    private static final Pattern PATTERN_OPTION = Pattern.compile("^（[ABCDEFG]）.*|^[ABCDEFGＡＢＣＤＥＦＧ].*|^（[ＡＢＣＤＥＦＧ]）.*");
+    /**
+     * 是否是选项
+     * @param item （A）马路；
+     *             A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下
+     *             C 机动车和非机动车          （D）汽车和拖拉机
+     *             D 挤靠“加塞”车辆，逼其离开
+     *             Ａ、前轮死锁       Ｂ、后轮死锁     Ｃ、甩尾失控      Ｄ、立刻停下
+     *             Ｃ、气化、刹车距离减少          Ｄ、杂质增大、刹车距离减少
+     * @return 是否是选项
+     */
+    public static boolean isOption(String item) {
+        return PATTERN_OPTION.matcher(item).matches();
+    }
+
+    /**
+     * 是否是解析
+     * @param item
+     * @return 是否是解析
+     */
+    public static boolean isParse(String item) {
+        return item.startsWith("解析：");
+    }
+
+    /**
+     * 返回答案
+     * @param item 答文：C
+     *             答案：ABD
+     *             答文:C
+     *             单选 12 答文：B   //需要切割
+     *             单选 23 答文：B
+     *             单选选 27 答文：D
+     * @return 答案 or null
+     */
+    @Nullable
+    public static String getAnswer(String item) {
+        if (item.startsWith("答文：") || item.startsWith("答案：") || item.startsWith("答文:")) {
+            return item;
+        }
+        if (item.contains(" 答文：")) {
+            return "答文：" + item.split(" 答文：")[1];
+        }
+        return null;
+    }
+
+    /**
+     *  正则：[（(]                     匹配 全角左括号 或 半角左括号
+     *        \\s*                     匹配0~ 多个空格（兼容有无空格）
+     *        ([ABCDEFGＡＢＣＤＥＦＧ]) 捕获答案字母（半角 + 全角 A/B/C 都支持）
+     *        \\s*                     匹配字母后0~ 多个空格
+     *        [）)]                    匹配 全角右括号 或 半角右括号
+     */
+    private static final Pattern PATTERN_ANSWER = Pattern.compile("[（(]\\s*([ABCDEFGＡＢＣＤＥＦＧ])\\s*[）)]");
+    /**
+     * 获取标题里的答案, 预防只有这个标题和选项, 没有答案的情况
+     * @param item 146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。
+     *             A 空间与目视距离       B 能见度与目测范围          C 空间与能见度
+     *
+     *             148、驾驶人在行车中经过积水路面时，按照防御性驾驶技术要求，应注意观察，留有余地，
+     *             ( A ) 。
+     *             A 特别注意减速慢行      B 迅速加速通过
+     *             C 保持正常车速通过      D 低档加速通过
+     * @return "答案：A"
+     */
+    @Nullable
+    public static String getAnswerInSubject(String item) {
+        Matcher matcher = PATTERN_ANSWER.matcher(item);
+//        while (matcher.find()) {
+//            String group = matcher.group();
+//            LogUtils.errorFormat("group = %s", group);
+//        }
+        if (matcher.find()) {
+            // 提取括号里的字母（group 1）
+            String group = matcher.group(1);
+//            LogUtils.errorFormat("item = %s, group(1) = %s", item, group);
+            if (group != null) return "答案:" + group;
+        }
+        return null;
     }
 }
