@@ -16,8 +16,8 @@ android {
         applicationId "com.actor.cnpc_qhse_exams"
         minSdk 24
         targetSdk 33
-        versionCode 20250422
-        versionName "1.1"
+        versionCode 20260319
+        versionName "1.2"
     }
 
     compileOptions {
@@ -74,6 +74,9 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", '*.aar'])
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
+    // 低版本BRV的item点击会报错, 没有: getBindingAdapterPosition()方法
+    // No virtual method getBindingAdapterPosition()I in class Lcom/chad/library/adapter/base/viewholder/BaseViewHolder; or its super classes (declaration of 'com.chad.library.adapter.base.viewholder.BaseViewHolder' appears in /data/app/~~u3JwYwwOG8JxRdwjxQz4Zw==/com.keika.dragon-WqL_bkVYqqqriamXEcQcMg==/base.apk)
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     /**
@@ -83,7 +86,7 @@ dependencies {
     implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.0.5') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.code.gson', module: 'gson'
-        exclude group: 'com.github.bumptech.glide', module: 'glide'
+//        exclude group: 'com.github.bumptech.glide', module: 'glide'
         exclude group: 'com.github.getActivity', module: 'XXPermissions'
         exclude group: 'com.github.getActivity', module: 'EasyHttp'
         exclude group: 'com.tencent', module: 'mmkv-static'

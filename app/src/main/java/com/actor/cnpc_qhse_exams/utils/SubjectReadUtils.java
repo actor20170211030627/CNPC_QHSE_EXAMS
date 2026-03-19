@@ -56,10 +56,6 @@ public class SubjectReadUtils {
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
 
-            if (item.equals("146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。")) {
-                System.out.println(1111);
-            }
-
             //考核点
             if (testPoint == null && isTestPoint(item)) {
                 testPoint = getTestPoint(item, list.get(i + 1));
@@ -89,7 +85,6 @@ public class SubjectReadUtils {
                         subject = item;
                     } else subject = subjectNum + item;
                 } else {
-                    LogUtils.errorFormat("请确认这是标题的一部分(而不是选项): %s", item);
                     subject = subject + item;
                 }
                 continue;
@@ -98,11 +93,25 @@ public class SubjectReadUtils {
             if (isOption) {
                 options.add(item);
                 isParseOption = true;
-                // if题目里有答案(这道题可能没有明确答案, 答案在标题里), 就需要判断下一行是否是选项,
-                if (answerInSubject == null) continue;
-                //判断下一行是否是选项, if下一行不是选项, 直接走答案的判断(因为有些题目没有答案, 答案在标题里面)
+                /**
+                 * 选项的下1行有可能是:
+                 *     本选项的第2行  //这1行选项没显示完
+                 *     下一个选项
+                 *     答案
+                 *     下一题的标题   //这1题的答案在标题里, 所以这1题没有答案
+                 */
+                if (i >= list.size() - 1) continue;
+                //判断下一行是否是答案, if下一行是答案, continue
+                String answerNext = getAnswer(list.get(i + 1));
+                if (answerNext != null) continue;
+                //判断下一行是否是选项, if下一行是选项, continue
                 boolean isNextOption = isOption(list.get(i + 1));
                 if (isNextOption) continue;
+                //判断下一行是否是标题, if下一行是标题, 需要直接走"答案"判断的代码
+                boolean isSubject = isSubject(list.get(i + 1));
+                if (!isSubject) continue;
+                // if题目里有答案(这道题可能没有明确答案, 答案在标题里), 就需要判断下一行是否是选项,
+//                if (answerInSubject == null) continue;
             } else if (isOptionNext) {
                 if (options.isEmpty()) {
                     LogUtils.errorFormat("options为空, item = %s", item);
@@ -178,7 +187,7 @@ public class SubjectReadUtils {
                         subject = item;
                     } else subject = subjectNum + item;
                 } else {
-                    LogUtils.errorFormat("请确认这是标题的一部分(而不是选项): %s", item);
+                    LogUtils.errorFormat("请确认这是标题的一部分(而不是答案): %s", item);
                     subject = subject + item;
                 }
                 continue;
@@ -194,9 +203,15 @@ public class SubjectReadUtils {
                 testPoint = subjectNum = subject = null;
                 continue;
             }
-            //解析
+            //解析(有可能是多行)
             if (isParse) {
                 subjects.get(subjects.size() - 1).setAnalysis(item);
+                if (i >= list.size() - 1) continue;
+                //if下一行是标题, 继续下一行
+                if (isSubject(list.get(i + 1))) continue;
+                //否则下一行就还是解析的第2行
+                subjects.get(subjects.size() - 1).setAnalysis(item + list.get(i + 1));
+                i ++;
                 continue;
             }
 
@@ -214,20 +229,34 @@ public class SubjectReadUtils {
     }
 
     /**
+     * 是否是考核点
+     * @param item 1.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
+     * @return 是否是考核点
+     */
+    public static boolean isTestPoint(String item) {
+        return item.contains("【考核点");
+    }
+
+    /**
+     * ^     行开头
+     * \\d+  匹配数字（1 位、2 位、3 位都可以：1、10、141）
+     * [.、] 匹配 . 或者 、 两种符号
+     * 【    以【开头
+     * .+    捕获【后面所有内容
+     * 】    以】开头
+     */
+    private static final Pattern REGEX_TEST_POINT = Pattern.compile("^\\d+[.、](【.+】)");
+    /**
      * 获取考核点
-     * 1.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
+     * @param item 1.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
+     * @param nextItem 标题, 用于没找到考核点时抛异常
+     * @return 【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
      */
     public static String getTestPoint(String item, String nextItem) {
-        String[] splits = item.split("考核点：")[1].split("】");
-        String testPoint = splits[0];
-        if (testPoint.isEmpty()) {
-            throw new IllegalStateException(TextUtils2.getStringFormat("【考核点】读取有问题: %s, 下一行: %s", item, nextItem));
-        }
-        //splits.length默认=1, if>1【考核点】后面有内容
-        if (splits.length > 1 && !splits[1].isEmpty()) {
-            throw new IllegalStateException(TextUtils2.getStringFormat("【考核点】后面有内容, 是标题??: %s, 下一行: %s", splits[1], nextItem));
-        }
-        return testPoint;
+        Matcher matcher = REGEX_TEST_POINT.matcher(item);
+        //只返回【】和里面的内容
+        if (matcher.find()) return matcher.group(1);
+        throw new IllegalStateException(TextUtils2.getStringFormat("【考核点】读取有问题: %s, 下一行: %s", item, nextItem));
     }
 
     /**
@@ -258,15 +287,6 @@ public class SubjectReadUtils {
     }
 
     /**
-     * 是否是考核点
-     * @param item
-     * @return 是否是考核点
-     */
-    public static boolean isTestPoint(String item) {
-        return item.contains("【考核点");
-    }
-
-    /**
      *  正则：匹配（A/B/C/D/E/F/G）     开头 or
      *       匹配  A/B/C/D/E/F/G       开头 or
      *       匹配  Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ  开头 or
@@ -290,18 +310,27 @@ public class SubjectReadUtils {
 
     /**
      * 是否是解析
-     * @param item
+     * @param item "解析：" or "解析"
      * @return 是否是解析
      */
     public static boolean isParse(String item) {
-        return item.startsWith("解析：");
+        return item.startsWith("解析");
     }
 
+
+    /**
+     * (?:答文|答案) 匹配 答文 或 答案,  ?: 不存起来的分组（非捕获组, 只要分组功能，不占用 group(1)编号, 不要保存结果，不占分组位置！）
+     * [:：]         匹配 半角冒号 : 或 全角冒号 ：
+     * (.+)          捕获冒号后面所有答案内容（ABC/ABD/BCD 都可以）= group(1)
+     */
+    private static final Pattern REGEX_ANSWER = Pattern.compile("(?:答文|答案)[:：](.+)");
+//    private static final Pattern REGEX_ANSWER = Pattern.compile("(答文|答案)[:：](.+)");//也可, group(1)不同而已="答文|答案"
     /**
      * 返回答案
      * @param item 答文：C
      *             答案：ABD
      *             答文:C
+     *             答文：            //"高原山区行车应适当调整发动机的点火提前角，与平原地区相比可（ C ）。" 这道题就是这个b样子, 本方法会返回null
      *             单选 12 答文：B   //需要切割
      *             单选 23 答文：B
      *             单选选 27 答文：D
@@ -309,12 +338,8 @@ public class SubjectReadUtils {
      */
     @Nullable
     public static String getAnswer(String item) {
-        if (item.startsWith("答文：") || item.startsWith("答案：") || item.startsWith("答文:")) {
-            return item;
-        }
-        if (item.contains(" 答文：")) {
-            return "答文：" + item.split(" 答文：")[1];
-        }
+        Matcher matcher = REGEX_ANSWER.matcher(item);
+        if (matcher.find()) return matcher.group();
         return null;
     }
 

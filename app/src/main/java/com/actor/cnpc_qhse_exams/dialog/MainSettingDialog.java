@@ -19,12 +19,14 @@ import com.blankj.utilcode.util.SizeUtils;
  */
 public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBinding> {
 
-    private final boolean                isShowAnalysis;
+    private final boolean                isShowTestPoint, isShowAnswer, isShowAnalysis;
     private final OnConfirmClickListener listener;
 
-    public MainSettingDialog(@NonNull Context context, boolean isShowAnalysis, @NonNull OnConfirmClickListener listener) {
+    public MainSettingDialog(@NonNull Context context, boolean isShowTestPoint, boolean isShowAnswer, boolean isShowAnalysis, @NonNull OnConfirmClickListener listener) {
         super(context);
         setWidthPercent(0.888888f, SizeUtils.dp2px(308f));
+        this.isShowTestPoint = isShowTestPoint;
+        this.isShowAnswer = isShowAnswer;
         this.isShowAnalysis = isShowAnalysis;
         this.listener = listener;
     }
@@ -34,6 +36,12 @@ public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBindin
         super.onCreate(savedInstanceState);
         viewBinding.ivClose.setOnClickListener(v -> {
             dismiss();
+        });
+        viewBinding.tvShowTestPoint.setOnClickListener(v -> {
+            v.setSelected(!v.isSelected());
+        });
+        viewBinding.tvShowAnswer.setOnClickListener(v -> {
+            v.setSelected(!v.isSelected());
         });
         viewBinding.tvShowAnalysis.setOnClickListener(v -> {
             v.setSelected(!v.isSelected());
@@ -46,16 +54,22 @@ public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBindin
         });
         viewBinding.stvYes.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onConfirmClick(viewBinding.tvShowAnalysis.isSelected(), viewBinding.tvShowScreen.isSelected());
+                listener.onConfirmClick(viewBinding.tvShowTestPoint.isSelected(),
+                        viewBinding.tvShowAnswer.isSelected(),
+                        viewBinding.tvShowAnalysis.isSelected(),
+                        viewBinding.tvShowScreen.isSelected()
+                );
             }
             dismiss();
         });
 
+        viewBinding.tvShowTestPoint.setSelected(isShowTestPoint);
+        viewBinding.tvShowAnswer.setSelected(isShowAnswer);
         viewBinding.tvShowAnalysis.setSelected(isShowAnalysis);
 //        viewBinding.tvShowScreen.setSelected(EasyWindow.existWindowShowingByClass(EasyWindowSubjects.class));
     }
 
     public interface OnConfirmClickListener {
-        void onConfirmClick(boolean isShowAnalysis, boolean isShow2Screen);
+        void onConfirmClick(boolean isShowTestPoint, boolean isShowAnswer, boolean isShowAnalysis, boolean isShow2Screen);
     }
 }

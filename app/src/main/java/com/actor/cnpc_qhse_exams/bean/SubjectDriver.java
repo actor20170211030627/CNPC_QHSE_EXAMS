@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Transient;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -23,10 +24,9 @@ import org.greenrobot.greendao.annotation.Transient;
         generateConstructors = false) //是否生成全参构造方法
 public class SubjectDriver {
 
-    @Transient//不映射到数据库
-    public static final int SEX_GIRL = 0;//女
+    //不映射到数据库
     @Transient
-    public static final int SEX_BOY = 1;//男
+    public boolean isShowAnswer = false; //是否显示答案
 
 
     //下方几个是正常数据库字段
@@ -81,10 +81,22 @@ public class SubjectDriver {
     private String subject;
 
     /**
+     * 题目图片
+     */
+    @Nullable
+    private String SubjectImage;
+
+    /**
      * 选项
      */
     @Nullable
     private String options;
+
+    /**
+     * 选项中的图片, 放在assets中
+     */
+    @Nullable
+    private String optionImages;
 
     /**
      * 答案
@@ -182,5 +194,21 @@ public String getTestPoint() {
 
 public void setTestPoint(String testPoint) {
     this.testPoint = testPoint;
+}
+
+public String getOptionImages() {
+    return this.optionImages;
+}
+
+public void setOptionImages(String optionImages) {
+    this.optionImages = optionImages;
+}
+
+public String getSubjectImage() {
+    return this.SubjectImage;
+}
+
+public void setSubjectImage(String SubjectImage) {
+    this.SubjectImage = SubjectImage;
 }
 }

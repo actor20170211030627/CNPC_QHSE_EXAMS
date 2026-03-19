@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class SubjectSelectUtils {
 
-    private static final SubjectDriverDao     DAO             = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
+    public static final SubjectDriverDao     DAO             = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
     private static final List<WhereCondition> whereConditions = new ArrayList<>(3);
 
     /**

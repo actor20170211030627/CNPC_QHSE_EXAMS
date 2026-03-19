@@ -2,6 +2,7 @@ package com.actor.cnpc_qhse_exams.global;
 
 import com.actor.database.greendao.GreenDaoUtils;
 import com.actor.myandroidframework.application.ActorApplication;
+import com.actor.myandroidframework.utils.AssetsUtils;
 import com.actor.myandroidframework.utils.ConfigUtils;
 
 /**
