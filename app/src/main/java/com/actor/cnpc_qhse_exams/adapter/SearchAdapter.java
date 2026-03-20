@@ -12,6 +12,7 @@ import com.actor.myandroidframework.utils.glide.GlideUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -120,6 +121,15 @@ public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolde
         }
         this.isShowAnalysis = isShowAnalysis;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void setList(Collection<? extends SubjectDriver> list) {
+        if (list != null && !list.isEmpty() && list.stream().findFirst().get().isShowAnswer != isShowAnswer) {
+            //检查并重设 isShowAnswer
+            for (SubjectDriver subjectDriver : list) subjectDriver.isShowAnswer = isShowAnswer;
+        }
+        super.setList(list);
     }
 
     public boolean isShowTestPoint() {

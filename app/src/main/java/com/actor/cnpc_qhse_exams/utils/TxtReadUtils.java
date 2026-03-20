@@ -53,7 +53,7 @@ public class TxtReadUtils {
      * 答文：C
      *
      *
-     * //-- 查询选项中有"答文"或"答案"的item: SELECT * FROM SUBJECT_DRIVER WHERE OPTIONS LIKE "%答文%" OR OPTIONS LIKE "%答案%";
+     * //-- 查询选项中有"答文"或"答案"的item:
      * 14.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】 //5139行
      * 汽车驶经学校、影剧院、百货商店和其他一些行人较多的场所附近时，应以（ A    ）通过。
      * （A）低速行驶；
@@ -83,7 +83,7 @@ public class TxtReadUtils {
      * 解析：
      *
      *
-     * //有图片的题目: SELECT * FROM SUBJECT_DRIVER WHERE SUBJECT LIKE "%电子仪表盘上出现%" OR SUBJECT LIKE "%如图所示%";
+     * //有图片的题目:
      * 68.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】
      * 汽车行驶过程中，电子仪表盘上出现（    ）黄色信号并伴有一种警告声，表示制动灯有故
      * 障。
@@ -121,7 +121,7 @@ public class TxtReadUtils {
      * 解析：
      */
     public static void readTxt2SubjectDrivers() {
-        String content = AssetsUtils.readAssets2String("交通安全基层站队QHSE标准化建设—驾驶员应知应会题库20260316.txt", Charset.defaultCharset().name());
+        String content = AssetsUtils.readAssets2String("交通安全基层站队QHSE标准化建设—驾驶员应知应会题库20260316_assets.txt", Charset.defaultCharset().name());
         if (TextUtils.isEmpty(content)) return;
         //换页键, 换页符, 光标移到下一页
         content = content.replaceAll("\f", "");
@@ -272,15 +272,52 @@ public class TxtReadUtils {
         GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects72);
         GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects73);
 
+
+
         /**
+         * 查询字段不应该为空但实际为空的item
+         * SELECT * FROM SUBJECT_DRIVER WHERE CHAPTER_TYPE = 0 OR SUBJECT_TYPE = 0 OR SUBJECT IS NULL OR TRIM(SUBJECT) = '' OR ANSWER IS NULL OR TRIM(ANSWER) = '';
+         */
+        String sql = TextUtils2.getStringFormat("WHERE %s = 0 OR %s = 0 OR %s IS NULL OR TRIM(%s) = '' OR %s IS NULL OR TRIM(%s) = ''",
+                SubjectDriverDao.Properties.ChapterType.columnName,
+                SubjectDriverDao.Properties.SubjectType.columnName,
+                SubjectDriverDao.Properties.Subject.columnName,
+                SubjectDriverDao.Properties.Subject.columnName,
+                SubjectDriverDao.Properties.Answer.columnName,
+                SubjectDriverDao.Properties.Answer.columnName
+        );
+        List<SubjectDriver> emptyIssueList = GreenDaoUtils.queryRawCreate(SubjectSelectUtils.DAO, sql).list();
+        for (SubjectDriver listOption : emptyIssueList) {
+            LogUtils.errorFormat("有字段不该为空, 但为空: id=%d, subject=%s", listOption.getId(), listOption.getSubject());
+        }
+
+
+
+        /**
+         * 查询选项中有"答文"或"答案"的item
+         * SELECT * FROM SUBJECT_DRIVER WHERE OPTIONS LIKE "%答文%" OR OPTIONS LIKE "%答案%";
+         */
+        List<SubjectDriver> listOptions = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
+                SubjectDriverDao.Properties.Options.like("%答文%"),
+                SubjectDriverDao.Properties.Options.like("%答案%")
+        );
+        for (SubjectDriver listOption : listOptions) {
+            LogUtils.errorFormat("读取有误: 选项中有\"答文\"or\"答案\": id=%d, subject=%s", listOption.getId(), listOption.getSubject());
+        }
+
+
+
+        /**
+         * 查询有图片的题目
+         * SELECT * FROM SUBJECT_DRIVER WHERE SUBJECT LIKE "%电子仪表盘上出现%" OR SUBJECT LIKE "%如图所示%";
          * 手动添加图片
          */
-        List<SubjectDriver> list0 = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
+        List<SubjectDriver> listSubject0 = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
                 SubjectDriverDao.Properties.Subject.like("%汽车行驶过程中，电子仪表盘上出现%")
         );
         //第68题, ABCD选项图片
-        if (!list0.isEmpty()) {
-            SubjectDriver subjectDriver = list0.get(0);
+        if (!listSubject0.isEmpty()) {
+            SubjectDriver subjectDriver = listSubject0.get(0);
             if (subjectDriver.getSubject().startsWith("68")) {
                 String optionImages = TextUtils2.getStringFormat("%s\n%s\n%s\n%s", "68A.jpg", "68B.jpg", "68C.jpg", "68D.jpg");
                 subjectDriver.setOptionImages(optionImages);
@@ -290,8 +327,8 @@ public class TxtReadUtils {
             }
         }
         //第69题, ABCD选项图片
-        if (list0.size() > 1) {
-            SubjectDriver subjectDriver = list0.get(1);
+        if (listSubject0.size() > 1) {
+            SubjectDriver subjectDriver = listSubject0.get(1);
             if (subjectDriver.getSubject().startsWith("69")) {
                 String optionImages = TextUtils2.getStringFormat("%s\n%s\n%s\n%s", "69A.jpg", "69B.jpg", "69C.jpg", "69D.jpg");
                 subjectDriver.setOptionImages(optionImages);
@@ -303,12 +340,12 @@ public class TxtReadUtils {
 
 
         //标题图片
-        List<SubjectDriver> list1 = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
+        List<SubjectDriver> listSubject1 = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
                 SubjectDriverDao.Properties.Subject.like("%如图所示%")
         );
         //第3题, 标题图片
-        if (!list1.isEmpty()) {
-            SubjectDriver subjectDriver = list1.get(0);
+        if (!listSubject1.isEmpty()) {
+            SubjectDriver subjectDriver = listSubject1.get(0);
             if (subjectDriver.getSubject().startsWith("3")) {
                 subjectDriver.setSubjectImage("3subject.jpg");
                 GreenDaoUtils.update(SubjectSelectUtils.DAO, subjectDriver);
@@ -317,8 +354,8 @@ public class TxtReadUtils {
             }
         }
         //第9题, 标题图片
-        if (list1.size() > 1) {
-            SubjectDriver subjectDriver = list1.get(1);
+        if (listSubject1.size() > 1) {
+            SubjectDriver subjectDriver = listSubject1.get(1);
             if (subjectDriver.getSubject().startsWith("9")) {
                 subjectDriver.setSubjectImage("9subject.jpg");
                 GreenDaoUtils.update(SubjectSelectUtils.DAO, subjectDriver);

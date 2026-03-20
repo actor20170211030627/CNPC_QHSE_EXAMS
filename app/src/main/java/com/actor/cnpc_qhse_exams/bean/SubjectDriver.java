@@ -8,7 +8,6 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -18,7 +17,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * @version 1.0
  */
 @Keep
-@Entity(nameInDb = "SUBJECT_DRIVER",  //这个实体类会在数据库中生成对应的表, 默认是大写并用_分开
+@Entity(nameInDb = "Subject_Driver",  //这个实体类会在数据库中生成对应的表, 默认是大写并用_分开
         createInDb = true,            //如果数据库里没有这张表, 就在数据库里创建
         generateGettersSetters = true,//如果写成false, Dao里面的方法会报错...
         generateConstructors = false) //是否生成全参构造方法
@@ -132,83 +131,83 @@ public class SubjectDriver {
         this.analysis = analysis;
     }
 
-public Long getId() {
-    return this.id;
-}
+    public Long getId() {
+        return this.id;
+    }
 
-public void setId(Long id) {
-    this.id = id;
-}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-public String getSubject() {
-    return this.subject;
-}
+    public String getSubject() {
+        return this.subject;
+    }
 
-public void setSubject(String subject) {
-    this.subject = subject;
-}
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-public String getAnswer() {
-    return this.answer;
-}
+    public String getAnswer() {
+        return this.answer;
+    }
 
-public void setAnswer(String answer) {
-    this.answer = answer;
-}
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
-public String getAnalysis() {
-    return this.analysis;
-}
+    public String getAnalysis() {
+        return this.analysis;
+    }
 
-public void setAnalysis(String analysis) {
-    this.analysis = analysis;
-}
+    public void setAnalysis(String analysis) {
+        this.analysis = analysis;
+    }
 
-public String getOptions() {
-    return this.options;
-}
+    public String getOptions() {
+        return this.options;
+    }
 
-public void setOptions(String options) {
-    this.options = options;
-}
+    public void setOptions(String options) {
+        this.options = options;
+    }
 
-public int getChapterType() {
-    return this.chapterType;
-}
+    public int getChapterType() {
+        return this.chapterType;
+    }
 
-public void setChapterType(int chapterType) {
-    this.chapterType = chapterType;
-}
+    public void setChapterType(int chapterType) {
+        this.chapterType = chapterType;
+    }
 
-public int getSubjectType() {
-    return this.subjectType;
-}
+    public int getSubjectType() {
+        return this.subjectType;
+    }
 
-public void setSubjectType(int subjectType) {
-    this.subjectType = subjectType;
-}
+    public void setSubjectType(int subjectType) {
+        this.subjectType = subjectType;
+    }
 
-public String getTestPoint() {
-    return this.testPoint;
-}
+    public String getTestPoint() {
+        return this.testPoint;
+    }
 
-public void setTestPoint(String testPoint) {
-    this.testPoint = testPoint;
-}
+    public void setTestPoint(String testPoint) {
+        this.testPoint = testPoint;
+    }
 
-public String getOptionImages() {
-    return this.optionImages;
-}
+    public String getOptionImages() {
+        return this.optionImages;
+    }
 
-public void setOptionImages(String optionImages) {
-    this.optionImages = optionImages;
-}
+    public void setOptionImages(String optionImages) {
+        this.optionImages = optionImages;
+    }
 
-public String getSubjectImage() {
-    return this.SubjectImage;
-}
+    public String getSubjectImage() {
+        return this.SubjectImage;
+    }
 
-public void setSubjectImage(String SubjectImage) {
-    this.SubjectImage = SubjectImage;
-}
+    public void setSubjectImage(String SubjectImage) {
+        this.SubjectImage = SubjectImage;
+    }
 }
