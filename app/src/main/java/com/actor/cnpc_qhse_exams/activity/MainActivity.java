@@ -9,6 +9,7 @@ import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.cnpc_qhse_exams.databinding.ActivityMainBinding;
 import com.actor.cnpc_qhse_exams.dialog.MainSettingDialog;
 import com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils;
+import com.actor.myandroidframework.utils.BRVUtils;
 import com.actor.myandroidframework.utils.LogUtils;
 import com.actor.myandroidframework.widget.BaseItemDecoration;
 import com.blankj.utilcode.util.KeyboardUtils;
@@ -24,6 +25,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private final SearchAdapter    mAdapter = new SearchAdapter();
+    private final int SIZE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 //        if (true) return;
 
         viewBinding.ivSetting.setOnClickListener(v -> {
-            new MainSettingDialog(this, mAdapter.isShowTestPoint(), mAdapter.isShowAnswer(), mAdapter.isShowAnalysis(), (isShowTestPoint, isShowAnswer, isShowAnalysis, isShow2Screen) -> {
+            new MainSettingDialog(this, mAdapter.isShowTestPoint(), mAdapter.isShowAnswer(),
+                    mAdapter.isShowAnalysis(), (isShowTestPoint, isShowAnswer, isShowAnalysis, isShow2Screen) -> {
                 mAdapter.setIsShowSettings(isShowTestPoint, isShowAnswer, isShowAnalysis);
                 if (isShow2Screen) {
                     judgePermissionAndShowWindow();
@@ -104,19 +107,43 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         viewBinding.stvSearch.setOnClickListener(v -> {
             KeyboardUtils.hideSoftInput(v);
-            Editable editable = viewBinding.setSearch.getText();
-            String subject = null;
-            if (editable != null) subject = editable.toString().trim();
-            //章节
-            int chapter = viewBinding.bsChapters.getSelectedItemPosition();
-            int subType = viewBinding.bsTypes.getSelectedItemPosition();
-
-            List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(subject, chapter, subType);
-            mAdapter.setList(subjectDrivers);
+            getList(true);
+        });
+        viewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            getList(true);
         });
 
         viewBinding.recyclerView.addItemDecoration(new BaseItemDecoration(0f, SizeUtils.dp2px(5f)));
         viewBinding.recyclerView.setAdapter(mAdapter);
+        BRVUtils.setEmptyView(mAdapter);
+        BRVUtils.setOnLoadMoreListener(mAdapter, () -> {
+            getList(false);
+        });
+
+        getList(true);
+    }
+
+    /**
+     * 获取数据
+     * @param isRefresh 是否是下拉刷新
+     */
+    private void getList(boolean isRefresh) {
+        Editable editable = viewBinding.setSearch.getText();
+        String subject = null;
+        if (editable != null) subject = editable.toString().trim();
+        //章节
+        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
+        int subType = viewBinding.bsTypes.getSelectedItemPosition();
+        int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
+        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(subject, chapter, subType, page, SIZE);
+
+        viewBinding.swipeRefreshLayout.setRefreshing(false);
+        if (isRefresh) {
+            mAdapter.setList(subjectDrivers);
+        } else if (subjectDrivers != null) {
+            mAdapter.addData(subjectDrivers);
+        }
+        BRVUtils.setLoadMoreStateBySize(mAdapter, subjectDrivers, SIZE);
     }
 
     /**

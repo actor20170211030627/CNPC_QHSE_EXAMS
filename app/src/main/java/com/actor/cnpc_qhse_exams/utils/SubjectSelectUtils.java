@@ -8,9 +8,8 @@ import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.database.greendao.GreenDaoUtils;
 import com.greendao.gen.SubjectDriverDao;
 
-import org.greenrobot.greendao.query.WhereCondition;
+import org.greenrobot.greendao.query.QueryBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,34 +23,30 @@ import java.util.List;
 public class SubjectSelectUtils {
 
     public static final SubjectDriverDao     DAO             = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
-    private static final List<WhereCondition> whereConditions = new ArrayList<>(3);
 
     /**
      * @param subject 搜索内容
      * @param chapter 章节
      * @param subType 题型
+     * @param page 分页查询, 第几页, 从1开始
+     * @param size 每页多少条数据
      */
-    public static List<SubjectDriver> select(@Nullable String subject, int chapter, int subType) {
-        if (TextUtils.isEmpty(subject) && chapter == 0 && subType == 0) {
-            return GreenDaoUtils.queryAll(DAO);
-        } else {
-            whereConditions.clear();
-            if (!TextUtils.isEmpty(subject)) {
-                whereConditions.add(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
-            }
-            //if选择了章节
-            if (chapter > 0) {
-                whereConditions.add(SubjectDriverDao.Properties.ChapterType.eq(chapter));
-            }
-            if (subType > 0) {
-                whereConditions.add(SubjectDriverDao.Properties.SubjectType.eq(subType));
-            }
-            WhereCondition cond = whereConditions.remove(0);
-            WhereCondition[] condMore = new WhereCondition[whereConditions.size()];
-            for (int i = 0; i < whereConditions.size(); i++) {
-                condMore[i] = whereConditions.get(i);
-            }
-            return  GreenDaoUtils.queryList(DAO, cond, condMore);
+    public static List<SubjectDriver> select(@Nullable String subject, int chapter, int subType, int page, int size) {
+        QueryBuilder<SubjectDriver> queryBuilder = DAO.queryBuilder()
+                .offset((page - 1) * size)
+                .limit(size);
+        if (TextUtils.isEmpty(subject) && chapter == 0 && subType == 0) return queryBuilder.list();
+
+        if (!TextUtils.isEmpty(subject)) {
+            queryBuilder.where(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
         }
+        //if选择了章节
+        if (chapter > 0) {
+            queryBuilder.where(SubjectDriverDao.Properties.ChapterType.eq(chapter));
+        }
+        if (subType > 0) {
+            queryBuilder.where(SubjectDriverDao.Properties.SubjectType.eq(subType));
+        }
+        return  queryBuilder.list();
     }
 }

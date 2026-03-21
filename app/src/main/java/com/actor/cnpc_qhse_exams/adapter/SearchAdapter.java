@@ -10,6 +10,8 @@ import com.actor.cnpc_qhse_exams.R;
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.myandroidframework.utils.glide.GlideUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.module.BaseLoadMoreModule;
+import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
 import java.util.Collection;
@@ -23,10 +25,10 @@ import java.util.List;
  * date       : 2025/4/21 on 18
  * @version 1.0
  */
-public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder> {
+public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder> implements LoadMoreModule {
 
     private boolean isShowTestPoint = false, isShowAnswer = false, isShowAnalysis = false;
-    private String click2ShowAnswer = "点击显示答案";
+    private final String click2ShowAnswer = "点击显示答案";
 
     public SearchAdapter() {
         super(R.layout.item_search);
@@ -142,5 +144,11 @@ public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolde
 
     public boolean isShowAnalysis() {
         return isShowAnalysis;
+    }
+
+    @NonNull
+    @Override
+    public BaseLoadMoreModule addLoadMoreModule(@NonNull BaseQuickAdapter<?, ?> baseQuickAdapter) {
+        return new BaseLoadMoreModule(baseQuickAdapter);
     }
 }

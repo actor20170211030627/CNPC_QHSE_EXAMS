@@ -2,6 +2,7 @@ package com.actor.cnpc_qhse_exams.utils;
 
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
@@ -44,7 +45,10 @@ public class SubjectReadUtils {
      * （D）反馈；
      * 答文：D
      * 解析：
+     * @deprecated 读取可能出错, 使用: {@link #read2SelectListNew(List, int, int)}
      */
+    @Deprecated
+    @NonNull
     public static List<SubjectDriver> read2SelectList(List<String> list, int chapterType, int subjectType) {
         //考核点                  标题号             标题             标题里的答案
         String testPoint = null, subjectNum = null, subject = null, answerInSubject = null;
@@ -76,7 +80,7 @@ public class SubjectReadUtils {
              *     （A）车前 100 米 （B）车后 100 米 （C）车前 150 米   （D）车后 150 米
              *     146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。  //← 这1行
              */
-            boolean isOptionNext = answer == null && !isTestPoint_Or_Subject(item) && isOption(list.get(i - 1));
+            boolean isOptionNext = answer == null && !isStartWithNumber(item) && isOption(list.get(i - 1));
             //是否是解析
             boolean isParse = isParse(item);
             //标题(有可能是多行)                                  答案那儿subject = null, 所以这儿要判断是否是解析
@@ -110,7 +114,7 @@ public class SubjectReadUtils {
                 boolean isNextOption = isOption(list.get(i + 1));
                 if (isNextOption) continue;
                 //判断下一行是否是标题, if下一行是标题, 需要直接走"答案"判断的代码
-                boolean isSubject = isTestPoint_Or_Subject(list.get(i + 1));
+                boolean isSubject = isStartWithNumber(list.get(i + 1));
                 if (!isSubject) continue;
                 // if题目里有答案(这道题可能没有明确答案, 答案在标题里), 就需要判断下一行是否是选项,
 //                if (answerInSubject == null) continue;
@@ -210,7 +214,7 @@ public class SubjectReadUtils {
                 subjects.get(subjects.size() - 1).setAnalysis(item);
                 if (i >= list.size() - 1) continue;
                 //if下一行是标题, 继续下一行
-                if (isTestPoint_Or_Subject(list.get(i + 1))) continue;
+                if (isStartWithNumber(list.get(i + 1))) continue;
                 //否则下一行就还是解析的第2行
                 subjects.get(subjects.size() - 1).setAnalysis(item + list.get(i + 1));
                 i ++;
@@ -287,25 +291,22 @@ public class SubjectReadUtils {
     }
 
     /**
-     * 是否是 考核点/标题
+     * 是否是数字开头: 考核点/标题
      * @return true, false
      */
-    public static boolean isTestPoint_Or_Subject(String item) {
+    public static boolean isStartWithNumber(String item) {
         Matcher matcher = REGEX_SUBJECT_NUM.matcher(item);
 //        return matcher.matches(); //完美匹配
         return matcher.find();
     }
 
     /**
-     * 匹配（A/B/C/D/E/F/G）      开头 or      //全角（
-     * 匹配（Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ） 开头 or
-     * 匹配  A/B/C/D/E/F/G        开头 or
-     * 匹配  Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ  开头 or
-     * 匹配 (A/B/C/D/E/F/G)       开头 or     //半角(
-     * 匹配 (Ａ/Ｂ/Ｃ/Ｄ/Ｅ/Ｆ/Ｇ) 开头
-     * .* 表示后面可以跟任意内容
+     * [（(]?     匹配可选的左括号
+     * [A-ZＡ-Ｚ] 匹配半角 / 全角 ABCD
+     * [）)]?     匹配可选的右括号
+     * .*         表示后面可以跟任意内容
      */
-    private static final Pattern PATTERN_IS_OPTION = Pattern.compile("^（[A-ZＡ-Ｚ]）.*|^[A-ZＡ-Ｚ].*|^([A-ZＡ-Ｚ]).*");
+    private static final Pattern PATTERN_IS_OPTION = Pattern.compile("^[（(]?[A-ZＡ-Ｚ][）)]?.*");
     /**
      * 是否是选项
      * @param item （A）马路；
@@ -318,6 +319,27 @@ public class SubjectReadUtils {
      */
     public static boolean isOption(String item) {
         return PATTERN_IS_OPTION.matcher(item).matches();
+    }
+
+    /**
+     * [（(]?     匹配可选的左括号
+     * [AＡ]      匹配半角 / 全角 AＡ
+     * [）)]?     匹配可选的右括号
+     * .*         表示后面可以跟任意内容
+     */
+    private static final Pattern PATTERN_IS_OPTION_A = Pattern.compile("^[（(]?[AＡ][）)]?.*");
+    /**
+     * 是否是选项A
+     * @param item （A）马路；
+     *             A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下
+     *             C 机动车和非机动车          （D）汽车和拖拉机
+     *             D 挤靠“加塞”车辆，逼其离开
+     *             Ａ、前轮死锁       Ｂ、后轮死锁     Ｃ、甩尾失控      Ｄ、立刻停下
+     *             Ｃ、气化、刹车距离减少          Ｄ、杂质增大、刹车距离减少
+     * @return 是否是选项A
+     */
+    public static boolean isOptionA(String item) {
+        return PATTERN_IS_OPTION_A.matcher(item).matches();
     }
 
 
@@ -352,6 +374,29 @@ public class SubjectReadUtils {
     }
 
     /**
+     * StringBuilder 转换成String
+     * @param sb
+     * @return
+     */
+    public static String sb2Options(StringBuilder sb) {
+        String options = sb.toString();
+        Matcher matcher = PATTERN_OPTIONS.matcher(options);
+        sb.setLength(0);
+        boolean isMatch = false;
+        while (matcher.find()) {
+            isMatch = true;
+            String option = matcher.group(1);
+            sb.append(option).append("\n");
+        }
+        if (isMatch) {
+            //去掉最后1个\n
+            sb.setLength(sb.length() - 1);
+            return sb.toString();
+        }
+        throw new IllegalStateException(TextUtils2.getStringFormat("选项没有匹配上: %s", options));
+    }
+
+    /**
      * 是否是解析
      * @param item "解析：" or "解析"
      * @return 是否是解析
@@ -368,14 +413,15 @@ public class SubjectReadUtils {
      */
     private static final Pattern PATTERN_PARSE = Pattern.compile("解析[:：]?\\s*(.*)");
     /**
-     * 是否是解析
+     * 获取解析 (不一定有解析)(也有可能是多行)
      * @param item "解析：" or "解析"
      * @return 是否是解析
      */
     public static String getParse(String item) {
         Matcher matcher = PATTERN_PARSE.matcher(item);
         if (matcher.find()) return matcher.group(1);
-        return null;
+        //没匹配到, 是解析的第2行
+        return item;
     }
 
 

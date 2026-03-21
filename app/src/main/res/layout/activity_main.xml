@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/title_bar_height"
         android:adjustViewBounds="true"
-        android:padding="16dp"
+        android:padding="13dp"
         android:src="@drawable/icon_setting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,21 +54,20 @@
         android:id="@+id/set_search"
         android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="6dp"
         android:gravity="center_vertical"
         android:hint="请输入要查询的题目"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:paddingStart="10dp"
+        android:paddingStart="6dp"
         android:paddingEnd="10dp"
         android:textColor="@color/gray_333"
         android:textColorHint="@color/gray_999"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/stv_search"
+        android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@id/stv_search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stv_search"
+        app:layout_constraintTop_toBottomOf="@id/iv_back"
         app:shape_radius="4dp"
         app:shape_strokeColor="#D2D2D2"
         app:shape_strokeSize="1dp" />
@@ -86,47 +85,53 @@
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_search"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:padding="10dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="3dp"
+        android:gravity="center"
+        android:paddingStart="9dp"
+        android:paddingEnd="9dp"
         android:text="搜索"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/set_search"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/set_search"
-        app:layout_constraintTop_toBottomOf="@id/iv_back"
+        app:layout_constraintTop_toTopOf="@id/set_search"
         app:shape_radius="5dp"
-        app:shape_solidColor="@color/red_D90000" />
+        app:shape_solidColor="#DA9D3F" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_chapters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
         android:entries="@array/chapters"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/set_search"
         app:layout_constraintTop_toBottomOf="@id/set_search" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_types"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
         app:bsEntriesString="题型: 全部,一、单选题,二、多选题,三、判断题"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/stv_search"
         app:layout_constraintTop_toTopOf="@id/bs_chapters" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bs_chapters"
-        tools:listitem="@layout/item_search" />
+        app:layout_constraintTop_toBottomOf="@id/bs_chapters">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_search" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
