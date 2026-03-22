@@ -48,9 +48,9 @@ public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolde
                 .setText(R.id.tv_options, item.getOptions())
                 .setText(R.id.tv_answer, item.isShowAnswer ? item.getAnswer() : click2ShowAnswer)
                 .setGone(R.id.tv_analysis, isAnalysisGone)
-                .setText(R.id.tv_analysis, item.getAnalysis())
+                .setText(R.id.tv_analysis, "解析：" + item.getAnalysis())
                 .setGone(R.id.tv_test_point, isTestPointGone)
-                .setText(R.id.tv_test_point, item.getTestPoint())
+                .setText(R.id.tv_test_point, "考核点：" + item.getTestPoint())
         ;
         //if标题有图片
         if (!TextUtils.isEmpty(item.getSubjectImage())) {

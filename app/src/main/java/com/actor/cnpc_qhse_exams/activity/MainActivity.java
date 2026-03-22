@@ -74,9 +74,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 //            LogUtils.error("\n");
 //        }
 
-//        TxtReadUtils.readSingleSelectSubjects();
-//        TxtReadUtils.readMultiSelectSubjects();
-//        TxtReadUtils.readJudgeSubjects();
 //        if (true) return;
 
         viewBinding.ivSetting.setOnClickListener(v -> {

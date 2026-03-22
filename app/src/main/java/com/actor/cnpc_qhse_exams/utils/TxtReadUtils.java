@@ -205,27 +205,27 @@ public class TxtReadUtils {
         }
 
         //读取成题目
-        List<SubjectDriver> subjects11 = SubjectReadUtils.read2SelectListNew(list11, 1, 1);
-        List<SubjectDriver> subjects12 = SubjectReadUtils.read2SelectListNew(list12, 1, 2);
-        List<SubjectDriver> subjects13 = SubjectReadUtils.read2Judges(list13, 1, 3);
-        List<SubjectDriver> subjects21 = SubjectReadUtils.read2SelectListNew(list21, 2, 1);
-        List<SubjectDriver> subjects22 = SubjectReadUtils.read2SelectListNew(list22, 2, 2);
-        List<SubjectDriver> subjects23 = SubjectReadUtils.read2Judges(list23, 2, 3);
-        List<SubjectDriver> subjects31 = SubjectReadUtils.read2SelectListNew(list31, 3, 1);
-        List<SubjectDriver> subjects32 = SubjectReadUtils.read2SelectListNew(list32, 3, 2);
-        List<SubjectDriver> subjects33 = SubjectReadUtils.read2Judges(list33, 3, 3);
-        List<SubjectDriver> subjects41 = SubjectReadUtils.read2SelectListNew(list41, 4, 1);
-        List<SubjectDriver> subjects42 = SubjectReadUtils.read2SelectListNew(list42, 4, 2);
-        List<SubjectDriver> subjects43 = SubjectReadUtils.read2Judges(list43, 4, 3);
-        List<SubjectDriver> subjects51 = SubjectReadUtils.read2SelectListNew(list51, 5, 1);
-        List<SubjectDriver> subjects52 = SubjectReadUtils.read2SelectListNew(list52, 5, 2);
-        List<SubjectDriver> subjects53 = SubjectReadUtils.read2Judges(list53, 5, 3);
-        List<SubjectDriver> subjects61 = SubjectReadUtils.read2SelectListNew(list61, 6, 1);
-        List<SubjectDriver> subjects62 = SubjectReadUtils.read2SelectListNew(list62, 6, 2);
-        List<SubjectDriver> subjects63 = SubjectReadUtils.read2Judges(list63, 6, 3);
-        List<SubjectDriver> subjects71 = SubjectReadUtils.read2SelectListNew(list71, 7, 1);
-        List<SubjectDriver> subjects72 = SubjectReadUtils.read2SelectListNew(list72, 7, 2);
-        List<SubjectDriver> subjects73 = SubjectReadUtils.read2Judges(list73, 7, 3);
+        List<SubjectDriver> subjects11 = SubjectReadUtils.read2SelectList(list11, 1, 1);
+        List<SubjectDriver> subjects12 = SubjectReadUtils.read2SelectList(list12, 1, 2);
+        List<SubjectDriver> subjects13 = SubjectReadUtils.read2JudgeList(list13, 1, 3);
+        List<SubjectDriver> subjects21 = SubjectReadUtils.read2SelectList(list21, 2, 1);
+        List<SubjectDriver> subjects22 = SubjectReadUtils.read2SelectList(list22, 2, 2);
+        List<SubjectDriver> subjects23 = SubjectReadUtils.read2JudgeList(list23, 2, 3);
+        List<SubjectDriver> subjects31 = SubjectReadUtils.read2SelectList(list31, 3, 1);
+        List<SubjectDriver> subjects32 = SubjectReadUtils.read2SelectList(list32, 3, 2);
+        List<SubjectDriver> subjects33 = SubjectReadUtils.read2JudgeList(list33, 3, 3);
+        List<SubjectDriver> subjects41 = SubjectReadUtils.read2SelectList(list41, 4, 1);
+        List<SubjectDriver> subjects42 = SubjectReadUtils.read2SelectList(list42, 4, 2);
+        List<SubjectDriver> subjects43 = SubjectReadUtils.read2JudgeList(list43, 4, 3);
+        List<SubjectDriver> subjects51 = SubjectReadUtils.read2SelectList(list51, 5, 1);
+        List<SubjectDriver> subjects52 = SubjectReadUtils.read2SelectList(list52, 5, 2);
+        List<SubjectDriver> subjects53 = SubjectReadUtils.read2JudgeList(list53, 5, 3);
+        List<SubjectDriver> subjects61 = SubjectReadUtils.read2SelectList(list61, 6, 1);
+        List<SubjectDriver> subjects62 = SubjectReadUtils.read2SelectList(list62, 6, 2);
+        List<SubjectDriver> subjects63 = SubjectReadUtils.read2JudgeList(list63, 6, 3);
+        List<SubjectDriver> subjects71 = SubjectReadUtils.read2SelectList(list71, 7, 1);
+        List<SubjectDriver> subjects72 = SubjectReadUtils.read2SelectList(list72, 7, 2);
+        List<SubjectDriver> subjects73 = SubjectReadUtils.read2JudgeList(list73, 7, 3);
 
         LogUtils.errorFormat("subjects11.size() = %d", subjects11.size());  //101
         LogUtils.errorFormat("subjects12.size() = %d", subjects12.size());  //19
@@ -239,7 +239,7 @@ public class TxtReadUtils {
         LogUtils.errorFormat("subjects41.size() = %d", subjects41.size());  //79
         LogUtils.errorFormat("subjects42.size() = %d", subjects42.size());  //24
         LogUtils.errorFormat("subjects43.size() = %d", subjects43.size());  //10
-        LogUtils.errorFormat("subjects51.size() = %d", subjects51.size());  //151 (跳过了第84题, 所以数据库中最大编号是152)
+        LogUtils.errorFormat("subjects51.size() = %d", subjects51.size());  //152 (跳过了第84题, 所以数据库中最大编号是153)
         LogUtils.errorFormat("subjects52.size() = %d", subjects52.size());  //0
         LogUtils.errorFormat("subjects53.size() = %d", subjects53.size());  //20
         LogUtils.errorFormat("subjects61.size() = %d", subjects61.size());  //41
@@ -363,83 +363,5 @@ public class TxtReadUtils {
                 LogUtils.error("手动添加图片, 第9题, 标题图片 未找到!");
             }
         }
-    }
-
-    /**
-     * 读取单选题目
-     */
-    public static void readSingleSelectSubjects() {
-        List<String> list11 = AssetsUtils.readAssets2List("qhse_11_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects11 = SubjectReadUtils.read2SelectList(list11, 1, 1);
-        List<String> list21 = AssetsUtils.readAssets2List("qhse_21_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects21 = SubjectReadUtils.read2SelectList(list21, 2, 1);
-        List<String> list31 = AssetsUtils.readAssets2List("qhse_31_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects31 = SubjectReadUtils.read2SelectList(list31, 3, 1);
-        List<String> list41 = AssetsUtils.readAssets2List("qhse_41_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects41 = SubjectReadUtils.read2SelectList(list41, 4, 1);
-        List<String> list51 = AssetsUtils.readAssets2List("qhse_51_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects51 = SubjectReadUtils.read2SelectList(list51, 5, 1);
-        List<String> list61 = AssetsUtils.readAssets2List("qhse_61_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects61 = SubjectReadUtils.read2SelectList(list61, 6, 1);
-        List<String> list71 = AssetsUtils.readAssets2List("qhse_71_single_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects71 = SubjectReadUtils.read2SelectList(list71, 7, 1);
-
-        //存储
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects11);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects21);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects31);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects41);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects51);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects61);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects71);
-    }
-
-    /**
-     * 读取多选题目
-     */
-    public static void readMultiSelectSubjects() {
-        List<String> list12 = AssetsUtils.readAssets2List("qhse_12_multi_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects12 = SubjectReadUtils.read2SelectList(list12, 1, 2);
-        List<String> list22 = AssetsUtils.readAssets2List("qhse_22_multi_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects22 = SubjectReadUtils.read2SelectList(list22, 2, 2);
-        List<String> list32 = AssetsUtils.readAssets2List("qhse_32_multi_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects32 = SubjectReadUtils.read2SelectList(list32, 3, 2);
-        List<String> list42 = AssetsUtils.readAssets2List("qhse_42_multi_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects42 = SubjectReadUtils.read2SelectList(list42, 4, 2);
-        List<String> list72 = AssetsUtils.readAssets2List("qhse_72_multi_select.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects72 = SubjectReadUtils.read2SelectList(list72, 7, 2);
-
-        //存储
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects12);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects22);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects32);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects42);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects72);
-    }
-
-    /**
-     * 读取判断题
-     */
-    public static void readJudgeSubjects() {
-        List<String> list13 = AssetsUtils.readAssets2List("qhse_13_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects13 = SubjectReadUtils.read2Judges(list13, 1, 3);
-        List<String> list23 = AssetsUtils.readAssets2List("qhse_23_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects23 = SubjectReadUtils.read2Judges(list23, 2, 3);
-        List<String> list33 = AssetsUtils.readAssets2List("qhse_33_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects33 = SubjectReadUtils.read2Judges(list33, 3, 3);
-        List<String> list43 = AssetsUtils.readAssets2List("qhse_43_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects43 = SubjectReadUtils.read2Judges(list43, 4, 3);
-        List<String> list53 = AssetsUtils.readAssets2List("qhse_53_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects53 = SubjectReadUtils.read2Judges(list53, 5, 3);
-        List<String> list73 = AssetsUtils.readAssets2List("qhse_73_judge.txt", Charset.defaultCharset().name());
-        List<SubjectDriver> subjects73 = SubjectReadUtils.read2Judges(list73, 7, 3);
-
-        //存储
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects13);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects23);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects33);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects43);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects53);
-        GreenDaoUtils.insertInTx(SubjectSelectUtils.DAO, subjects73);
     }
 }

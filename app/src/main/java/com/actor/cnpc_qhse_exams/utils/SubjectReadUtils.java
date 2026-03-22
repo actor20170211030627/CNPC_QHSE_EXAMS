@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class SubjectReadUtils {
 
     /**
-     * 单选题/多选题
+     * 读取 单选题/多选题
      *
      * 1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。
      * （A）马路；
@@ -45,119 +45,145 @@ public class SubjectReadUtils {
      * （D）反馈；
      * 答文：D
      * 解析：
-     * @deprecated 读取可能出错, 使用: {@link #read2SelectListNew(List, int, int)}
+     *
+     * 12. 【考核点：层级+专业；题型：单选题；难度：易；类型：基础】
+     * 13. 雾天对安全行车的主要影响是能见度低，视线不清，按照防御性驾驶技术要求，要留有
+     * 余地，适当拉开与前车的跟车距离，要引人注意，及时开启（    ）。
+     *
+     * 145、高速公路上停车检修时应在（ D ）放置警示牌。
+     * （A）车前 100 米 （B）车后 100 米 （C）车前 150 米   （D）车后 150 米
+     *
+     * @param list 选择题列表
+     * @param chapterType 章节
+     * @param subjectType 题型
+     * @return
      */
-    @Deprecated
     @NonNull
     public static List<SubjectDriver> read2SelectList(List<String> list, int chapterType, int subjectType) {
-        //考核点                  标题号             标题             标题里的答案
-        String testPoint = null, subjectNum = null, subject = null, answerInSubject = null;
-        //是否已经解析选项
-        boolean isParseOption = false;
-        StringBuilder sb = new StringBuilder();
-        //选项: A~G
-        List<String> options = new ArrayList<>(7);
-        List<SubjectDriver> subjects = new ArrayList<>(200);
-
+        List<Integer> numberStartPos = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
-
-            //考核点
-            if (testPoint == null && isTestPoint(item)) {
-                testPoint = getTestPoint(item, list.get(i + 1));
-                subjectNum = getSubjectNum(item);
+            //if是考核点
+            if (isTestPoint(item)) {
+                numberStartPos.add(i);
                 continue;
             }
-            //是否是选项
-            boolean isOption = isOption(item);
-            //是否是答案
-            String answer = getAnswer(item);
-            /**
-             * 是否是选项的下一行 (1个选项有可能是2行)
-             * 要先判断是否是答案, 因为答案的上面也是选项
-             * 标题的上面也有可能是选项, 例:
-             *     145、高速公路上停车检修时应在（ D ）放置警示牌。
-             *     （A）车前 100 米 （B）车后 100 米 （C）车前 150 米   （D）车后 150 米
-             *     146、我们有两个词来形容防御性驾驶，它们是（ C ），空间给车辆，能见度给驾驶员。  //← 这1行
-             */
-            boolean isOptionNext = answer == null && !isStartWithNumber(item) && isOption(list.get(i - 1));
-            //是否是解析
-            boolean isParse = isParse(item);
-            //标题(有可能是多行)                                  答案那儿subject = null, 所以这儿要判断是否是解析
-            if (!isParseOption && !isOption && !isOptionNext && !isParse) {
-                answerInSubject = getAnswerInSubject(item);
-                if (subject == null) {
-                    if (subjectNum == null) {
-                        subject = item;
-                    } else subject = subjectNum + item;
-                } else {
-                    subject = subject + item;
-                }
-                continue;
+            //if本行是数字开头           && (第1行 || 上1行不是考核点)
+            if (isStartWithNumber(item) && (numberStartPos.isEmpty() || !isTestPoint(list.get(i - 1)))) {
+                numberStartPos.add(i);
             }
-            //选项
-            if (isOption) {
-                addOptions(options, item);
-                isParseOption = true;
-                /**
-                 * 选项的下1行有可能是:
-                 *     本选项的第2行  //这1行选项没显示完
-                 *     下一个选项
-                 *     答案
-                 *     下一题的标题   //这1题的答案在标题里, 所以这1题没有答案
-                 */
-                if (i >= list.size() - 1) continue;
-                //判断下一行是否是答案, if下一行是答案, continue
-                String answerNext = getAnswer(list.get(i + 1));
-                if (answerNext != null) continue;
-                //判断下一行是否是选项, if下一行是选项, continue
-                boolean isNextOption = isOption(list.get(i + 1));
-                if (isNextOption) continue;
-                //判断下一行是否是标题, if下一行是标题, 需要直接走"答案"判断的代码
-                boolean isSubject = isStartWithNumber(list.get(i + 1));
-                if (!isSubject) continue;
-                // if题目里有答案(这道题可能没有明确答案, 答案在标题里), 就需要判断下一行是否是选项,
-//                if (answerInSubject == null) continue;
-            } else if (isOptionNext) {
-                if (options.isEmpty()) {
-                    LogUtils.errorFormat("options为空, item = %s", item);
-                }
-                options.set(options.size() - 1, options.get(options.size() - 1) + item);
-                isParseOption = true;
-                continue;
-            }
-            //答案
-            if (answer == null) answer = answerInSubject;
-            if (answer != null) {
-                if (subject == null || options.isEmpty()) {
-                    throw new IllegalStateException(TextUtils2.getStringFormat("没有读取到标题 or 选项: 字符串: %s, options.size() = %d", item, options.size()));
-                }
-                for (int i1 = 0; i1 < options.size(); i1++) {
-                    sb.append(options.get(i1));
-                    if (i1 < options.size() - 1) sb.append("\n");
-                }
-                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, testPoint, subject, sb.toString(), answer, null);
-                subjects.add(sd);
-
-                testPoint = subjectNum = subject = answerInSubject = null;
-                isParseOption = false;
-                sb.setLength(0);
-                options.clear();
-                continue;
-            }
-            //解析(不一定有解析)
-            if (isParse) {
-                subjects.get(subjects.size() - 1).setAnalysis(item);
-                continue;
-            }
-
-            throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 未知类型字符串: %s", i, item));
         }
+        LogUtils.errorFormat("%d%d 选择题共找到 %d 个", chapterType, subjectType, numberStartPos.size());
+        List<SubjectDriver> subjects = new ArrayList<>(numberStartPos.size());
+        if (numberStartPos.isEmpty()) return subjects;
+
+        //本题开始位置     下一题开始位置
+        int posStart = 0, posNext = 0;
+        //从每一道题的开始位置 遍历每一道题
+        for (int i = 0; i < numberStartPos.size() - 1; i++) {
+            posStart = numberStartPos.get(i);
+            posNext = numberStartPos.get(i + 1);
+            subjects.add(readListRange2Select(list, chapterType, subjectType, posStart, posNext));
+        }
+        //最后1题
+        posStart = numberStartPos.get(numberStartPos.size() - 1);
+        posNext = list.size();
+        subjects.add(readListRange2Select(list, chapterType, subjectType, posStart, posNext));
         return subjects;
     }
 
     /**
-     * 判断题
+     * 从list中读取数据解析成 SubjectDriver
+     * @param list
+     * @param posStart 本题开始位置
+     * @param posNext 下一题开始位置
+     * @return
+     */
+    public static SubjectDriver readListRange2Select(List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
+        //考核点                  标题号             标题             选项            答案
+        String testPoint = null, subjectNum = null, subject = null, options = null, answer = null,
+                //标题里的答案             解析
+                answerInSubject = null, parse = null;
+        StringBuilder sb = new StringBuilder(200);
+        String item = list.get(posStart);
+        /**
+         * 第1项: 有可能是 考核点/标题
+         *        if是考核点 (不一定有) (最多1行)
+         */
+        if (isTestPoint(item)) {
+            testPoint = getTestPoint(item, list.get(posStart + 1));
+            subjectNum = getSubjectNum(item);
+            item = list.get(++posStart);
+        } else {
+            //第1行是标题
+            sb.append(item);
+        }
+
+        /**
+         * 第2项: 标题 (一定有) (有可能是多行)
+         */
+        if (sb.length() == 0) sb.append(subjectNum).append(item);
+        item = list.get(++posStart);
+        boolean isOption = isOption(item);
+        while (!isOption) {
+            sb.append(item);
+            item = list.get(++posStart);
+            isOption = isOption(item);
+        }
+        subject = sb.toString();
+        //获取标题中的答案 (不一定有)
+        answerInSubject = getAnswerInSubject(subject);
+        sb.setLength(0);
+
+        /**
+         * 第3项: 选项ABCDEFG (一定有) (一定是多个选项) (每个选项有可能是多行) (也可能多个选项共一行)
+         */
+        //添加第1个选项
+        sb.append(item);
+        String answer1 = null;
+        boolean isParse = false;
+        if (posStart < posNext - 1) {
+            item = list.get(++posStart);
+            answer1 = getAnswer(item);
+            isParse = isParse(item);
+            //if既不是答案, 也不是解析, 就一定还是选项 (答案不一定有) (解析不一定有)
+            while (answer1 == null && !isParse) {
+                sb.append(item);
+                if (posStart >= posNext - 1) break;
+                item = list.get(++posStart);
+                answer1 = getAnswer(item);
+                isParse = isParse(item);
+            }
+        }
+        options = sb2Options(sb);
+        sb.setLength(0);
+
+        /**
+         * 第4项: 答案 (不一定有) (最多1行)
+         */
+        if (answer1 != null) answer = answer1;
+        if (answer == null) answer = answerInSubject;
+        if (answer == null) {
+            throw new IllegalStateException(TextUtils2.getStringFormat("这题未读取到答案: %s", subject));
+        }
+
+        /**
+         * 第5项: 解析 (不一定有) (有可能是多行)
+         */
+        if (isParse) sb.append(getParse(item));
+        while (posStart < posNext - 1) {
+            item = list.get(++posStart);
+            sb.append(getParse(item));
+        }
+        if (sb.length() > 0) parse = sb.toString();
+        sb.setLength(0);
+
+        return new SubjectDriver(chapterType, subjectType, testPoint, subject, options, answer, parse);
+    }
+
+
+    /**
+     * 读取 判断题
      *
      * 3.实习驾驶员可以试车。
      * 答案：错误
@@ -169,70 +195,97 @@ public class SubjectReadUtils {
      * 答文：正确
      * 解析：
      */
-    public static List<SubjectDriver> read2Judges(List<String> list, int chapterType, int subjectType) {
-        //考核点                  标题号             标题
-        String testPoint = null, subjectNum = null, subject = null;
-        List<SubjectDriver> subjects = new ArrayList<>(60);
-
+    public static List<SubjectDriver> read2JudgeList(List<String> list, int chapterType, int subjectType) {
+        List<Integer> numberStartPos = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
-            //考核点
-            if (testPoint == null && isTestPoint(item)) {
-                testPoint = getTestPoint(item, list.get(i + 1));
-                subjectNum = getSubjectNum(item);
+            //if是考核点
+            if (isTestPoint(item)) {
+                numberStartPos.add(i);
                 continue;
             }
-            //是否是答案
-            String answer = getAnswer(item);
-            //是否是解析
-            boolean isParse = isParse(item);
-            //标题(有可能是多行)                 答案那儿subject = null, 所以这儿要判断是否是解析
-            if (answer == null && !isParse) {
-                if (subject == null) {
-                    if (subjectNum == null) {
-                        subject = item;
-                    } else subject = subjectNum + item;
-                } else {
-                    LogUtils.errorFormat("请确认这是标题的一部分(而不是答案): %s", item);
-                    subject = subject + item;
-                }
-                continue;
+            //if本行是数字开头           && (第1行 || 上1行不是考核点)
+            if (isStartWithNumber(item) && (numberStartPos.isEmpty() || !isTestPoint(list.get(i - 1)))) {
+                numberStartPos.add(i);
             }
-            //答案
-            if (answer != null) {
-                if (subject == null) {
-                    throw new IllegalStateException(TextUtils2.getStringFormat("没有读取到标题: %d 行, 字符串: %s", i, item));
-                }
-                SubjectDriver sd = new SubjectDriver(chapterType, subjectType, testPoint, subject, null, answer, null);
-                subjects.add(sd);
-
-                testPoint = subjectNum = subject = null;
-                continue;
-            }
-            //解析(有可能是多行)
-            if (isParse) {
-                subjects.get(subjects.size() - 1).setAnalysis(item);
-                if (i >= list.size() - 1) continue;
-                //if下一行是标题, 继续下一行
-                if (isStartWithNumber(list.get(i + 1))) continue;
-                //否则下一行就还是解析的第2行
-                subjects.get(subjects.size() - 1).setAnalysis(item + list.get(i + 1));
-                i ++;
-                continue;
-            }
-
-            throw new IllegalArgumentException(TextUtils2.getStringFormat("%d 行, 未知类型字符串: %s", i, item));
         }
+        LogUtils.errorFormat("%d%d 判断题共找到 %d 个", chapterType, subjectType, numberStartPos.size());
+        List<SubjectDriver> subjects = new ArrayList<>(numberStartPos.size());
+        if (numberStartPos.isEmpty()) return subjects;
+
+        //本题开始位置     下一题开始位置
+        int posStart = 0, posNext = 0;
+        //从每一道题的开始位置 遍历每一道题
+        for (int i = 0; i < numberStartPos.size() - 1; i++) {
+            posStart = numberStartPos.get(i);
+            posNext = numberStartPos.get(i + 1);
+            subjects.add(readListRange2Judge(list, chapterType, subjectType, posStart, posNext));
+        }
+        //最后1题
+        posStart = numberStartPos.get(numberStartPos.size() - 1);
+        posNext = list.size();
+        subjects.add(readListRange2Judge(list, chapterType, subjectType, posStart, posNext));
         return subjects;
     }
 
     /**
-     * 判断是否为空
+     * 从list中读取数据解析成 SubjectDriver
+     * @param list
+     * @param posStart 本题开始位置
+     * @param posNext 下一题开始位置
+     * @return
      */
-    public static boolean judgeEmpty(String item) {
-        if (item == null)  return true;
-        return item.trim().isEmpty();
+    public static SubjectDriver readListRange2Judge(List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
+        //考核点                  标题号             标题            答案            解析
+        String testPoint = null, subjectNum = null, subject = null, answer = null, parse = null;
+        StringBuilder sb = new StringBuilder(200);
+        String item = list.get(posStart);
+        /**
+         * 第1项: 有可能是 考核点/标题
+         *        if是考核点 (不一定有) (最多1行)
+         */
+        if (isTestPoint(item)) {
+            testPoint = getTestPoint(item, list.get(posStart + 1));
+            subjectNum = getSubjectNum(item);
+            item = list.get(++posStart);
+        } else {
+            //第1行是标题
+            sb.append(item);
+        }
+
+        /**
+         * 第2项: 标题 (一定有) (有可能是多行)
+         */
+        if (sb.length() == 0) sb.append(subjectNum).append(item);
+        item = list.get(++posStart);
+        String answer1 = getAnswer(item);
+        while (answer1 == null) {
+            sb.append(item);
+            item = list.get(++posStart);
+            answer1 = getAnswer(item);
+        }
+        subject = sb.toString();
+        sb.setLength(0);
+
+        /**
+         * 第3项: 答案 (一定有) (只有1行)
+         */
+        answer = answer1;
+
+        /**
+         * 第4项: 解析 (不一定有) (有可能是多行)
+         */
+        while (posStart < posNext - 1) {
+            item = list.get(++posStart);
+            sb.append(getParse(item));
+        }
+        if (sb.length() > 0) parse = sb.toString();
+        sb.setLength(0);
+
+        return new SubjectDriver(chapterType, subjectType, testPoint, subject, null, answer, parse);
     }
+
+
 
     /**
      * 是否是考核点
@@ -323,28 +376,6 @@ public class SubjectReadUtils {
 
     /**
      * [（(]?     匹配可选的左括号
-     * [AＡ]      匹配半角 / 全角 AＡ
-     * [）)]?     匹配可选的右括号
-     * .*         表示后面可以跟任意内容
-     */
-    private static final Pattern PATTERN_IS_OPTION_A = Pattern.compile("^[（(]?[AＡ][）)]?.*");
-    /**
-     * 是否是选项A
-     * @param item （A）马路；
-     *             A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下
-     *             C 机动车和非机动车          （D）汽车和拖拉机
-     *             D 挤靠“加塞”车辆，逼其离开
-     *             Ａ、前轮死锁       Ｂ、后轮死锁     Ｃ、甩尾失控      Ｄ、立刻停下
-     *             Ｃ、气化、刹车距离减少          Ｄ、杂质增大、刹车距离减少
-     * @return 是否是选项A
-     */
-    public static boolean isOptionA(String item) {
-        return PATTERN_IS_OPTION_A.matcher(item).matches();
-    }
-
-
-    /**
-     * [（(]?     匹配可选的左括号
      * [A-ZＡ-Ｚ] 匹配半角 / 全角 ABCD
      * [）)]?     匹配可选的右括号
      * [、\\s]?   匹配可选的顿号或空格
@@ -352,27 +383,6 @@ public class SubjectReadUtils {
      * (?=...)   前瞻定位，自动分割下一个选项
      */
     private static final Pattern PATTERN_OPTIONS = Pattern.compile("([（(]?[A-ZＡ-Ｚ][）)]?[、\\s]?.*?)(?=\\s*[（(]?[A-ZＡ-Ｚ]|$)");
-    /**
-     * 添加选项, 1行有可能有多个选项, 所以要1个1个的添加
-     * @param item （A）马路；
-     *             A、前轮死锁  B、后轮死锁  C、甩尾失控  D、立刻停下
-     *             C 机动车和非机动车          （D）汽车和拖拉机
-     *             D 挤靠“加塞”车辆，逼其离开
-     *             Ａ、前轮死锁       Ｂ、后轮死锁     Ｃ、甩尾失控      Ｄ、立刻停下
-     *             Ｃ、气化、刹车距离减少          Ｄ、杂质增大、刹车距离减少
-     * @return 是否是选项
-     */
-    public static void addOptions(List<String> options, String item) {
-        Matcher matcher = PATTERN_OPTIONS.matcher(item);
-        boolean isMatch = false;
-        while (matcher.find()) {
-            isMatch = true;
-            String option = matcher.group(1);
-            options.add(option);
-        }
-        if (!isMatch) throw new IllegalStateException(TextUtils2.getStringFormat("选项没有匹配上: %s", item));
-    }
-
     /**
      * StringBuilder 转换成String
      * @param sb

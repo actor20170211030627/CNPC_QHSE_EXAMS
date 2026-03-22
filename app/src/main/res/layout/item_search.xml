@@ -10,12 +10,21 @@
     tools:context=".adapter.SearchAdapter">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_test_point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_999"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="考核点：层级+专业；题型：单选题；难度：中；类型：专业" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_333"
         android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_test_point"
         tools:text="1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。" />
 
     <!-- 770/272=2.8308823529411764705882352941176 -->
@@ -98,27 +107,21 @@
         tools:text="答案：C" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_test_point"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray_999"
-        android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_answer"
-        tools:text="【考核点：层级+专业；题型：单选题；难度：中；类型：专业】" />
-
-    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_analysis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/gray_999"
-        android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@id/tv_test_point"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_answer"
         tools:text="解析：持有境外机动车驾驶证的人，符合国务院公安部门规定的驾驶许可条件，经公安机关交通管理部门考核合格的，可以发给中国的机动车驾驶证。" />
 
-    <View
+    <com.actor.myandroidframework.widget.LineView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="3dp"
-        android:background="#DDDDDD"
-        app:layout_constraintTop_toBottomOf="@id/tv_analysis" />
+        app:layout_constraintTop_toBottomOf="@id/tv_analysis"
+        app:lvGradientCenterColor="@color/green_0CBB24"
+        app:lvGradientEndColor="@color/blue_2EABFB"
+        app:lvGradientStartColor="@color/red"
+        app:lvLineWidth="1dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
