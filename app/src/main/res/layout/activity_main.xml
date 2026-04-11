@@ -7,131 +7,44 @@
     android:background="@color/white"
     tools:context=".activity.MainActivity">
 
-    <!--    <com.actor.myandroidframework.widget.StatusBarHeightView-->
-    <!--        android:id="@+id/status_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_back"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:padding="18dp"
-        android:src="@drawable/icon_arrow_left_black2"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="中石油题库 - 驾驶员"
-        android:textColor="#ff000000"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/iv_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_back" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/title_bar_height"
-        android:adjustViewBounds="true"
-        android:padding="13dp"
-        android:src="@drawable/icon_setting"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <!--android:drawableEnd="@drawable/icon_search_gray"
-    -->
-    <com.hjq.shape.view.ShapeEditText
-        android:id="@+id/set_search"
-        android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="6dp"
-        android:gravity="center_vertical"
-        android:hint="请输入要查询的题目"
-        android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:paddingStart="6dp"
-        android:paddingEnd="10dp"
-        android:textColor="@color/gray_333"
-        android:textColorHint="@color/gray_999"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@id/stv_search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_back"
-        app:shape_radius="4dp"
-        app:shape_strokeColor="#D2D2D2"
-        app:shape_strokeSize="1dp" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_close"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:padding="10dp"
-        android:src="@drawable/icon_close_black"
-        app:layout_constraintBottom_toBottomOf="@id/set_search"
-        app:layout_constraintEnd_toEndOf="@id/set_search"
-        app:layout_constraintTop_toTopOf="@id/set_search" />
+        android:src="@drawable/bg_main" />
 
     <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_search"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="3dp"
+        android:id="@+id/stv_study"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:gravity="center"
-        android:paddingStart="9dp"
-        android:paddingEnd="9dp"
-        android:text="搜索"
+        android:text="去学习"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/set_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/set_search"
-        app:shape_radius="5dp"
-        app:shape_solidColor="#DA9D3F" />
-
-    <com.actor.myandroidframework.widget.BaseSpinner
-        android:id="@+id/bs_chapters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/shape_drop_down_normal"
-        android:dropDownVerticalOffset="50dp"
-        android:entries="@array/chapters"
-        app:layout_constraintStart_toStartOf="@id/set_search"
-        app:layout_constraintTop_toBottomOf="@id/set_search" />
-
-    <com.actor.myandroidframework.widget.BaseSpinner
-        android:id="@+id/bs_types"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_drop_down_normal"
-        android:dropDownVerticalOffset="50dp"
-        app:bsEntriesString="题型: 全部,一、单选题,二、多选题,三、判断题"
-        app:layout_constraintEnd_toEndOf="@id/stv_search"
-        app:layout_constraintTop_toTopOf="@id/bs_chapters" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_study"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bs_chapters">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        app:shape_radius="5dp"
+        app:shape_solidColor="@color/green_14B9C8" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_search" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_exam"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="去测试"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_exam"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stv_study"
+        app:layout_constraintWidth_percent="0.6"
+        app:shape_radius="5dp"
+        app:shape_solidColor="@color/blue_5ECCFD" />
 </androidx.constraintlayout.widget.ConstraintLayout>

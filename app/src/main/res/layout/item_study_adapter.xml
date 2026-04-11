@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
-    tools:context=".adapter.SearchAdapter">
+    tools:context=".adapter.StudyAdapter">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_test_point"
@@ -122,6 +122,5 @@
         app:layout_constraintTop_toBottomOf="@id/tv_analysis"
         app:lvGradientCenterColor="@color/green_0CBB24"
         app:lvGradientEndColor="@color/blue_2EABFB"
-        app:lvGradientStartColor="@color/red"
-        app:lvLineWidth="1dp" />
+        app:lvGradientStartColor="@color/red" />
 </androidx.constraintlayout.widget.ConstraintLayout>

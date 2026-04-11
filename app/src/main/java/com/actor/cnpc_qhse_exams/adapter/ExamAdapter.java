@@ -2,13 +2,18 @@ package com.actor.cnpc_qhse_exams.adapter;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.actor.cnpc_qhse_exams.R;
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
+import com.actor.myandroidframework.utils.TextUtils2;
 import com.actor.myandroidframework.utils.glide.GlideUtils;
+import com.actor.myandroidframework.widget.BaseItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.module.BaseLoadMoreModule;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -25,33 +30,59 @@ import java.util.List;
  * date       : 2025/4/21 on 18
  * @version 1.0
  */
-public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder> implements LoadMoreModule {
+public class ExamAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder> {
 
-    private boolean isShowTestPoint = false, isShowAnswer = false, isShowAnalysis = false;
-    private final String click2ShowAnswer = "点击显示答案";
+    private final OnCommitClickListener commitClickListener;
 
-    public SearchAdapter() {
-        super(R.layout.item_search);
-        setOnItemClickListener((adapter, view, position) -> {
+    public ExamAdapter(OnCommitClickListener listener) {
+        super(R.layout.item_exam_adapter);
+        this.commitClickListener = listener;
+        //提交
+        addChildClickViewIds(R.id.stv_commit);
+        setOnItemChildClickListener((adapter, view, position) -> {
+            RecyclerView recyclerView = (RecyclerView) getViewByPosition(position, R.id.recycler_view);
+            ExamChildAdapter adapter1 = (ExamChildAdapter) recyclerView.getAdapter();
+            boolean answerRight = ((ExamChildAdapter) adapter1).isAnswerRight();
             SubjectDriver item = getItem(position);
-            item.isShowAnswer = !item.isShowAnswer;
+            item.isShowAnswer = true;
             notifyItemChanged(position, item.isShowAnswer);
+            //if答错, 抖动动画
+            if (!answerRight) {
+                //抖动动画
+                Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.shake);
+                getViewByPosition(position, R.id.tv_answer).startAnimation(animation);
+            }
+            if (commitClickListener != null) commitClickListener.OnCommitClick(position, item.getId(), answerRight);
         });
     }
 
     @Override
     protected void convert(@NonNull BaseViewHolder holder, SubjectDriver item) {
-        boolean isTestPointGone = !isShowTestPoint || TextUtils.isEmpty(item.getTestPoint());
-        boolean isAnalysisGone = !isShowAnalysis || TextUtils.isEmpty(item.getAnalysis());
-        holder.setText(R.id.tv_subject, item.getSubject())
-                .setGone(R.id.tv_options, TextUtils.isEmpty(item.getOptions()))
+        int position = holder.getAbsoluteAdapterPosition();
+        boolean isTestPointEmpty = TextUtils.isEmpty(item.getTestPoint());
+        boolean isAnalysisEmpty = TextUtils.isEmpty(item.getAnalysis());
+        RecyclerView recyclerView = holder.setText(R.id.tv_subject, item.getSubject())
+//                .setGone(R.id.tv_options, TextUtils.isEmpty(item.getOptions()))
                 .setText(R.id.tv_options, item.getOptions())
-                .setText(R.id.tv_answer, item.isShowAnswer ? item.getAnswer() : click2ShowAnswer)
-                .setGone(R.id.tv_analysis, isAnalysisGone)
+                .setVisible(R.id.tv_answer, item.isShowAnswer)
+                .setText(R.id.tv_answer, "答案：" + item.getAnswer())
+                .setVisible(R.id.tv_analysis, !isAnalysisEmpty && item.isShowAnswer)
                 .setText(R.id.tv_analysis, "解析：" + item.getAnalysis())
-                .setGone(R.id.tv_test_point, isTestPointGone)
+                .setVisible(R.id.tv_test_point, !isTestPointEmpty)
                 .setText(R.id.tv_test_point, "考核点：" + item.getTestPoint())
+                .setText(R.id.tv_word_pos_total, TextUtils2.getStringFormat("进度 %d/%d", position + 1, getDefItemCount()))
+                .getView(R.id.recycler_view)
         ;
+        ExamChildAdapter adapter = (ExamChildAdapter) recyclerView.getAdapter();
+        if (adapter == null) {
+            adapter = new ExamChildAdapter();
+            recyclerView.setAdapter(adapter);
+        }
+        if (recyclerView.getItemDecorationCount() == 0) {
+            recyclerView.addItemDecoration(new BaseItemDecoration(20, 0));
+        }
+        adapter.setList2(item.getSubjectType(), item.getOptions(), item.getAnswer());
+
         //if标题有图片
         if (!TextUtils.isEmpty(item.getSubjectImage())) {
             ImageView ivSubjectImage = holder.getView(R.id.iv_subject_image);
@@ -94,61 +125,24 @@ public class SearchAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolde
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, SubjectDriver item, List<?> payloads) {
+    protected void convert(@NonNull BaseViewHolder holder, SubjectDriver item, @NonNull List<?> payloads) {
         super.convert(holder, item, payloads);
         if (!payloads.isEmpty()) {
             Object isShowAnswer = payloads.get(0);
             if (isShowAnswer instanceof Boolean) {
                 if ((Boolean) isShowAnswer) {
-                    holder.setText(R.id.tv_answer, item.getAnswer());
+                    holder.setVisible(R.id.tv_answer, true);
+                    boolean isAnalysisEmpty = TextUtils.isEmpty(item.getAnalysis());
+                    holder.setVisible(R.id.tv_analysis, !isAnalysisEmpty);
                 } else {
-                    holder.setText(R.id.tv_answer, click2ShowAnswer);
+                    holder.setVisible(R.id.tv_answer, false);
+                    holder.setVisible(R.id.tv_analysis, false);
                 }
             }
         }
     }
 
-    public void setIsShowSettings(boolean isShowTestPoint, boolean isShowAnswer, boolean isShowAnalysis) {
-        if (this.isShowTestPoint == isShowTestPoint &&
-                this.isShowAnswer == isShowAnswer &&
-                this.isShowAnalysis == isShowAnalysis
-        ) return;
-        this.isShowTestPoint = isShowTestPoint;
-        //if答案的显示状态重新设置了, 才修改item的答案显示状态
-        if (this.isShowAnswer != isShowAnswer) {
-            this.isShowAnswer = isShowAnswer;
-            for (SubjectDriver datum : getData()) {
-                datum.isShowAnswer = isShowAnswer;
-            }
-        }
-        this.isShowAnalysis = isShowAnalysis;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void setList(Collection<? extends SubjectDriver> list) {
-        if (list != null && !list.isEmpty() && list.stream().findFirst().get().isShowAnswer != isShowAnswer) {
-            //检查并重设 isShowAnswer
-            for (SubjectDriver subjectDriver : list) subjectDriver.isShowAnswer = isShowAnswer;
-        }
-        super.setList(list);
-    }
-
-    public boolean isShowTestPoint() {
-        return isShowTestPoint;
-    }
-
-    public boolean isShowAnswer() {
-        return isShowAnswer;
-    }
-
-    public boolean isShowAnalysis() {
-        return isShowAnalysis;
-    }
-
-    @NonNull
-    @Override
-    public BaseLoadMoreModule addLoadMoreModule(@NonNull BaseQuickAdapter<?, ?> baseQuickAdapter) {
-        return new BaseLoadMoreModule(baseQuickAdapter);
+    public interface OnCommitClickListener {
+        public void OnCommitClick(int position, Long id, boolean isAnswerRight);
     }
 }

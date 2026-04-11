@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />-->
-
     <application
         android:name=".global.MyApplication"
         android:allowBackup="false"
@@ -15,10 +13,17 @@
         android:theme="@style/Theme.CNPC_QHSE_EXAMS"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ExamActivity"
+            android:exported="false" />
+        <!-- 默认不要弹出输入法 -->
+        <activity
+            android:name=".activity.StudyActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"> <!-- 默认不要弹出输入法 -->
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

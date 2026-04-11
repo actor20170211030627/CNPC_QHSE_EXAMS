@@ -8,7 +8,7 @@
     app:shape_solidColor="#FCEAC9"
     app:shape_strokeColor="@color/black"
     app:shape_strokeSize="1dp"
-    tools:context=".dialog.MainSettingDialog">
+    tools:context=".dialog.ExamSettingDialog">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_close"
@@ -36,76 +36,32 @@
         app:shape_strokeSize="1dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_show_test_point"
+        android:id="@+id/tv_play_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:drawableEnd="@drawable/selector_switch_gray_green"
         android:drawablePadding="5dp"
         android:padding="8dp"
-        android:text="显示考核点:"
+        android:text="播放声音:"
         android:textColor="#ff3d3d3d"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stv" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_show_answer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/selector_switch_gray_green"
-        android:drawablePadding="5dp"
-        android:padding="8dp"
-        android:text="显示答案:"
-        android:textColor="#ff3d3d3d"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show_test_point" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_show_analysis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/selector_switch_gray_green"
-        android:drawablePadding="5dp"
-        android:padding="8dp"
-        android:text="显示解析:"
-        android:textColor="#ff3d3d3d"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show_answer" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_show_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/selector_switch_gray_green"
-        android:drawablePadding="5dp"
-        android:padding="8dp"
-        android:text="显示悬浮窗:"
-        android:textColor="#ff3d3d3d"
-        android:textSize="15sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show_analysis"
-        tools:visibility="visible" />
-
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_cancel"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:gravity="center"
         android:text="取消"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@id/stv_yes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show_screen"
+        app:layout_constraintTop_toBottomOf="@id/tv_play_voice"
         app:layout_constraintWidth_percent="0.35"
         app:shape_radius="5dp"
         app:shape_solidColor="#42A5F7" />

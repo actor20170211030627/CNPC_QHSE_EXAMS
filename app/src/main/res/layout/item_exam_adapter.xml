@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".adapter.ExamAdapter">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_test_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_999"
+            android:textSize="15sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="考核点：层级+专业；题型：单选题；难度：中；类型：专业" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/gray_333"
+            android:textSize="17sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_test_point"
+            tools:text="1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。" />
+
+        <!-- 770/272=2.8308823529411764705882352941176 -->
+        <!-- 528/338=1.5621301775147928994082840236686 -->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_subject_image"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_subject"
+            tools:src="@drawable/icon_switch_gray2"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_666"
+            android:textSize="17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_subject_image"
+            tools:text="（A）马路；\n
+（B）铁路；\n
+（C）公路；\n
+（D）公安机关交通管理部门；       //可能没有D选项" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_option_a"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/iv_option_b"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toEndOf="@id/tv_options"
+            app:layout_constraintTop_toTopOf="@id/tv_options"
+            tools:src="@drawable/icon_setting" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_option_b"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/iv_option_c"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="@id/iv_option_a"
+            app:layout_constraintTop_toBottomOf="@id/iv_option_a"
+            tools:src="@drawable/icon_setting" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_option_c"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@id/iv_option_d"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="@id/iv_option_a"
+            app:layout_constraintTop_toBottomOf="@id/iv_option_b"
+            tools:src="@drawable/icon_setting" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_option_d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="@id/tv_options"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="@id/iv_option_a"
+            app:layout_constraintTop_toBottomOf="@id/iv_option_c"
+            tools:src="@drawable/icon_setting" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginBottom="2dp"
+            android:background="#F8CEAE"
+            app:layout_constraintBottom_toBottomOf="@id/tv"
+            app:layout_constraintEnd_toEndOf="@id/tv"
+            app:layout_constraintStart_toStartOf="@id/tv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="请选择答案"
+            android:textColor="#ffa85319"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/tv_options"
+            app:layout_constraintTop_toBottomOf="@id/tv_options" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_word_pos_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textColor="#ff53b765"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv"
+            tools:text="进度 0/10" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv"
+            app:spanCount="6"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_exam_adapter_child" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/stv_commit"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_view"
+            app:layout_constraintWidth_percent="0.6"
+            app:shape_radius="25dp"
+            app:shape_solidColor="@color/blue_5ECCFD" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/red_D90000"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/stv_commit"
+            tools:text="答案：C" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_analysis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_999"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_answer"
+            tools:text="解析：持有境外机动车驾驶证的人，符合国务院公安部门规定的驾驶许可条件，经公安机关交通管理部门考核合格的，可以发给中国的机动车驾驶证。" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

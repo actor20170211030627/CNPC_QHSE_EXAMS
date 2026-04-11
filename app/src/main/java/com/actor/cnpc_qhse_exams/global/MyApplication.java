@@ -33,7 +33,7 @@ public class MyApplication extends ActorApplication {
         );
         DBVersion dbVersion = GreenDaoUtils.queryRawCreate(dao, sql).unique();
         //每一个版本都重新copy一次数据库
-        if (dbVersion != null && AppUtils.getAppVersionCode() != dbVersion.getVersionCode()) {
+        if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
             AssetsUtils.copyFile2InternalDbsDir(true, dbName);
         }
     }

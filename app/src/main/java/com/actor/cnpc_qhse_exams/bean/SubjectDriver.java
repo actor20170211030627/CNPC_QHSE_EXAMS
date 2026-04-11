@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Transient;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -23,9 +24,9 @@ import org.greenrobot.greendao.annotation.Transient;
         generateConstructors = false) //是否生成全参构造方法
 public class SubjectDriver {
 
-    //不映射到数据库
+    //不映射到数据库, 是否显示答案
     @Transient
-    public boolean isShowAnswer = false; //是否显示答案
+    public boolean isShowAnswer = false;
 
 
     //下方几个是正常数据库字段

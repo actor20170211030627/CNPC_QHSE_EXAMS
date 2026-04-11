@@ -1,21 +1,10 @@
 package com.actor.cnpc_qhse_exams.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.view.inputmethod.EditorInfo;
 
-import com.actor.cnpc_qhse_exams.adapter.SearchAdapter;
-import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.cnpc_qhse_exams.databinding.ActivityMainBinding;
-import com.actor.cnpc_qhse_exams.dialog.MainSettingDialog;
-import com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils;
-import com.actor.myandroidframework.utils.BRVUtils;
-import com.actor.myandroidframework.utils.LogUtils;
-import com.actor.myandroidframework.widget.BaseItemDecoration;
-import com.blankj.utilcode.util.KeyboardUtils;
-import com.blankj.utilcode.util.SizeUtils;
-
-import java.util.List;
+import com.actor.cnpc_qhse_exams.dialog.ChapterTypeSettingDialog;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -24,13 +13,19 @@ import java.util.List;
  */
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
-    private final SearchAdapter    mAdapter = new SearchAdapter();
-    private final int SIZE = 10;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setTitle("中石油题库 - 驾驶员");
+
+        viewBinding.stvStudy.setOnClickListener(v -> {
+            startActivity(new Intent(this, StudyActivity.class), v);
+        });
+        viewBinding.stvExam.setOnClickListener(v -> {
+            new ChapterTypeSettingDialog(this, (chapter, type) -> {
+                ExamActivity.start(MainActivity.this, v, chapter, type);
+            }).show();
+        });
+
 //        TxtReadUtils.readTxt2SubjectDrivers();
 //        /**
 //         * 写入版本信息
@@ -48,6 +43,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 //        }
 
 
+        //正则测试 的代码
 //        final Pattern PATTERN_OPTIONS = Pattern.compile("(?:答文|答案)[:：]\\s*[（(]?([A-ZＡ-Ｚ\\s]+|正确|错误)[）)]?\\s*$");
 //        String[] lines = {
 //                "答文：C",
@@ -72,102 +68,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 ////                LogUtils.errorFormat("s = %s, rawAnswer = '%s', answer = '%s'", s, rawAnswer, answer);
 //            }
 //            LogUtils.error("\n");
-//        }
-
-//        if (true) return;
-
-        viewBinding.ivSetting.setOnClickListener(v -> {
-            new MainSettingDialog(this, mAdapter.isShowTestPoint(), mAdapter.isShowAnswer(),
-                    mAdapter.isShowAnalysis(), (isShowTestPoint, isShowAnswer, isShowAnalysis, isShow2Screen) -> {
-                mAdapter.setIsShowSettings(isShowTestPoint, isShowAnswer, isShowAnalysis);
-                if (isShow2Screen) {
-                    judgePermissionAndShowWindow();
-                } else {
-//                    EasyWindow.recycleAllWindow();
-                }
-            }).show();
-        });
-
-        //搜索按钮点击监听
-        viewBinding.setSearch.setOnEditorActionListener((v, actionId, event) -> {
-            LogUtils.errorFormat("actionId = %d, event = %s", actionId, event);
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewBinding.stvSearch.callOnClick();
-                return true;
-            }
-            return false;
-        });
-
-        viewBinding.ivClose.setOnClickListener(v -> {
-            viewBinding.setSearch.setText("");
-        });
-
-        viewBinding.stvSearch.setOnClickListener(v -> {
-            KeyboardUtils.hideSoftInput(v);
-            getList(true);
-        });
-        viewBinding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            getList(true);
-        });
-
-        viewBinding.recyclerView.addItemDecoration(new BaseItemDecoration(0f, SizeUtils.dp2px(5f)));
-        viewBinding.recyclerView.setAdapter(mAdapter);
-        BRVUtils.setEmptyView(mAdapter);
-        BRVUtils.setOnLoadMoreListener(mAdapter, () -> {
-            getList(false);
-        });
-
-        getList(true);
-    }
-
-    /**
-     * 获取数据
-     * @param isRefresh 是否是下拉刷新
-     */
-    private void getList(boolean isRefresh) {
-        Editable editable = viewBinding.setSearch.getText();
-        String subject = null;
-        if (editable != null) subject = editable.toString().trim();
-        //章节
-        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
-        int subType = viewBinding.bsTypes.getSelectedItemPosition();
-        int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
-        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(subject, chapter, subType, page, SIZE);
-
-        viewBinding.swipeRefreshLayout.setRefreshing(false);
-        if (isRefresh) {
-            mAdapter.setList(subjectDrivers);
-        } else if (subjectDrivers != null) {
-            mAdapter.addData(subjectDrivers);
-        }
-        BRVUtils.setLoadMoreStateBySize(mAdapter, subjectDrivers, SIZE);
-    }
-
-    /**
-     * 判断权限 & 显示全局浮窗
-     */
-    private void judgePermissionAndShowWindow() {
-//        if (XXPermissions.isGranted(this, Permission.SYSTEM_ALERT_WINDOW)) {
-//            new EasyWindowSubjects().show();
-//        } else {
-//            new ConfirmDialog(this, "权限申请说明",
-//                    "显示悬浮窗需要申请权限, 否则不能显示到其它应用上.",
-//                    isConfirmClick -> {
-//                if (!isConfirmClick) return;
-//                XXPermissions.with(mActivity)
-//                        .permission(Permission.SYSTEM_ALERT_WINDOW)
-//                        .request(new OnPermissionCallback() {
-//                            @Override
-//                            public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
-//                                new EasyWindowSubjects().show();
-//                            }
-//                            @Override
-//                            public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {
-//                                OnPermissionCallback.super.onDenied(permissions, doNotAskAgain);
-//                                ToasterUtils.warning("您拒绝了权限!");
-//                            }
-//                        });
-//                }).show();
 //        }
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">中石油题库</string>
+    <string name="transition_name_study">transition_name_study</string>
+    <string name="transition_name_exam">transition_name_exam</string>
 </resources>

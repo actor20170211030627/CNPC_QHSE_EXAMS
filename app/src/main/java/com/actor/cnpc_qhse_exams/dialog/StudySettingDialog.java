@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.actor.cnpc_qhse_exams.databinding.DialogMainSettingBinding;
+import com.actor.cnpc_qhse_exams.databinding.DialogStudySettingBinding;
 import com.actor.myandroidframework.dialog.ViewBindingDialog;
 import com.blankj.utilcode.util.SizeUtils;
 
@@ -17,12 +17,12 @@ import com.blankj.utilcode.util.SizeUtils;
  * date       : 2025/4/21 on 20
  * @version 1.0
  */
-public class MainSettingDialog extends ViewBindingDialog<DialogMainSettingBinding> {
+public class StudySettingDialog extends ViewBindingDialog<DialogStudySettingBinding> {
 
     private final boolean                isShowTestPoint, isShowAnswer, isShowAnalysis;
     private final OnConfirmClickListener listener;
 
-    public MainSettingDialog(@NonNull Context context, boolean isShowTestPoint, boolean isShowAnswer, boolean isShowAnalysis, @NonNull OnConfirmClickListener listener) {
+    public StudySettingDialog(@NonNull Context context, boolean isShowTestPoint, boolean isShowAnswer, boolean isShowAnalysis, @NonNull OnConfirmClickListener listener) {
         super(context);
         setWidthPercent(0.888888f, SizeUtils.dp2px(308f));
         this.isShowTestPoint = isShowTestPoint;
