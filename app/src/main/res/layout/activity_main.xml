@@ -15,11 +15,11 @@
         android:src="@drawable/bg_main" />
 
     <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_study"
+        android:id="@+id/stv_study_20250421"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="去学习"
+        android:text="去学习(20250421)"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:transitionName="@string/transition_name_study"
@@ -32,18 +32,53 @@
         app:shape_solidColor="@color/green_14B9C8" />
 
     <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_exam"
+        android:id="@+id/stv_exam_20250421"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="去测试"
+        android:text="去测试(20250421)"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:transitionName="@string/transition_name_exam"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stv_study"
+        app:layout_constraintTop_toBottomOf="@id/stv_study_20250421"
+        app:layout_constraintWidth_percent="0.6"
+        app:shape_radius="5dp"
+        app:shape_solidColor="@color/blue_5ECCFD" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_study_20260712"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="去学习(20260712)"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_study"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintVertical_bias="0.78"
+        app:shape_radius="5dp"
+        app:shape_solidColor="@color/green_14B9C8" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_exam_20260712"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="去测试(20260712)"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_exam"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stv_study_20260712"
         app:layout_constraintWidth_percent="0.6"
         app:shape_radius="5dp"
         app:shape_solidColor="@color/blue_5ECCFD" />

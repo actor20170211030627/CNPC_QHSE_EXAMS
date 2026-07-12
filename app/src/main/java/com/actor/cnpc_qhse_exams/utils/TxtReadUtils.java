@@ -120,7 +120,7 @@ public class TxtReadUtils {
      * 答文：ABC
      * 解析：
      */
-    public static void readTxt2SubjectDrivers() {
+    public static void readTxt2SubjectDrivers(long version) {
         String content = AssetsUtils.readAssets2String("交通安全基层站队QHSE标准化建设—驾驶员应知应会题库20260316_assets.txt", Charset.defaultCharset().name());
         if (TextUtils.isEmpty(content)) return;
         //换页键, 换页符, 光标移到下一页
@@ -205,27 +205,27 @@ public class TxtReadUtils {
         }
 
         //读取成题目
-        List<SubjectDriver> subjects11 = SubjectReadUtils.read2SelectList(list11, 1, 1);
-        List<SubjectDriver> subjects12 = SubjectReadUtils.read2SelectList(list12, 1, 2);
-        List<SubjectDriver> subjects13 = SubjectReadUtils.read2JudgeList(list13, 1, 3);
-        List<SubjectDriver> subjects21 = SubjectReadUtils.read2SelectList(list21, 2, 1);
-        List<SubjectDriver> subjects22 = SubjectReadUtils.read2SelectList(list22, 2, 2);
-        List<SubjectDriver> subjects23 = SubjectReadUtils.read2JudgeList(list23, 2, 3);
-        List<SubjectDriver> subjects31 = SubjectReadUtils.read2SelectList(list31, 3, 1);
-        List<SubjectDriver> subjects32 = SubjectReadUtils.read2SelectList(list32, 3, 2);
-        List<SubjectDriver> subjects33 = SubjectReadUtils.read2JudgeList(list33, 3, 3);
-        List<SubjectDriver> subjects41 = SubjectReadUtils.read2SelectList(list41, 4, 1);
-        List<SubjectDriver> subjects42 = SubjectReadUtils.read2SelectList(list42, 4, 2);
-        List<SubjectDriver> subjects43 = SubjectReadUtils.read2JudgeList(list43, 4, 3);
-        List<SubjectDriver> subjects51 = SubjectReadUtils.read2SelectList(list51, 5, 1);
-        List<SubjectDriver> subjects52 = SubjectReadUtils.read2SelectList(list52, 5, 2);
-        List<SubjectDriver> subjects53 = SubjectReadUtils.read2JudgeList(list53, 5, 3);
-        List<SubjectDriver> subjects61 = SubjectReadUtils.read2SelectList(list61, 6, 1);
-        List<SubjectDriver> subjects62 = SubjectReadUtils.read2SelectList(list62, 6, 2);
-        List<SubjectDriver> subjects63 = SubjectReadUtils.read2JudgeList(list63, 6, 3);
-        List<SubjectDriver> subjects71 = SubjectReadUtils.read2SelectList(list71, 7, 1);
-        List<SubjectDriver> subjects72 = SubjectReadUtils.read2SelectList(list72, 7, 2);
-        List<SubjectDriver> subjects73 = SubjectReadUtils.read2JudgeList(list73, 7, 3);
+        List<SubjectDriver> subjects11 = SubjectReadUtils.read2SelectList(version, list11, 1, 1);
+        List<SubjectDriver> subjects12 = SubjectReadUtils.read2SelectList(version, list12, 1, 2);
+        List<SubjectDriver> subjects13 = SubjectReadUtils.read2JudgeList(version, list13, 1, 3);
+        List<SubjectDriver> subjects21 = SubjectReadUtils.read2SelectList(version, list21, 2, 1);
+        List<SubjectDriver> subjects22 = SubjectReadUtils.read2SelectList(version, list22, 2, 2);
+        List<SubjectDriver> subjects23 = SubjectReadUtils.read2JudgeList(version, list23, 2, 3);
+        List<SubjectDriver> subjects31 = SubjectReadUtils.read2SelectList(version, list31, 3, 1);
+        List<SubjectDriver> subjects32 = SubjectReadUtils.read2SelectList(version, list32, 3, 2);
+        List<SubjectDriver> subjects33 = SubjectReadUtils.read2JudgeList(version, list33, 3, 3);
+        List<SubjectDriver> subjects41 = SubjectReadUtils.read2SelectList(version, list41, 4, 1);
+        List<SubjectDriver> subjects42 = SubjectReadUtils.read2SelectList(version, list42, 4, 2);
+        List<SubjectDriver> subjects43 = SubjectReadUtils.read2JudgeList(version, list43, 4, 3);
+        List<SubjectDriver> subjects51 = SubjectReadUtils.read2SelectList(version, list51, 5, 1);
+        List<SubjectDriver> subjects52 = SubjectReadUtils.read2SelectList(version, list52, 5, 2);
+        List<SubjectDriver> subjects53 = SubjectReadUtils.read2JudgeList(version, list53, 5, 3);
+        List<SubjectDriver> subjects61 = SubjectReadUtils.read2SelectList(version, list61, 6, 1);
+        List<SubjectDriver> subjects62 = SubjectReadUtils.read2SelectList(version, list62, 6, 2);
+        List<SubjectDriver> subjects63 = SubjectReadUtils.read2JudgeList(version, list63, 6, 3);
+        List<SubjectDriver> subjects71 = SubjectReadUtils.read2SelectList(version, list71, 7, 1);
+        List<SubjectDriver> subjects72 = SubjectReadUtils.read2SelectList(version, list72, 7, 2);
+        List<SubjectDriver> subjects73 = SubjectReadUtils.read2JudgeList(version, list73, 7, 3);
 
         LogUtils.errorFormat("subjects11.size() = %d", subjects11.size());  //101
         LogUtils.errorFormat("subjects12.size() = %d", subjects12.size());  //19

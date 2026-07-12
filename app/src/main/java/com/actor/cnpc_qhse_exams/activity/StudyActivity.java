@@ -1,13 +1,16 @@
 package com.actor.cnpc_qhse_exams.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
 import com.actor.cnpc_qhse_exams.adapter.StudyAdapter;
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.cnpc_qhse_exams.databinding.ActivityStudyBinding;
 import com.actor.cnpc_qhse_exams.dialog.StudySettingDialog;
+import com.actor.cnpc_qhse_exams.global.Global;
 import com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils;
 import com.actor.myandroidframework.utils.BRVUtils;
 import com.actor.myandroidframework.utils.LogUtils;
@@ -28,9 +31,21 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
     private final StudyAdapter mAdapter = new StudyAdapter();
     private final int          SIZE     = 10;
 
+    public static void start(BaseActivity<?> activity, View v, int chapter) {
+        activity.startActivity(new Intent(activity, StudyActivity.class)
+                .putExtra(Global.CHAPTER, chapter), v);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        int chapter = intent.getIntExtra(Global.CHAPTER, 0);
+        //if没有章节类型
+        if (chapter == -1) {
+            viewBinding.bsChapters.setVisibility(View.INVISIBLE);
+        }
+
         viewBinding.ivBack.setOnClickListener(v -> onBackPressed());
 
         viewBinding.ivSetting.setOnClickListener(v -> {
@@ -86,8 +101,10 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
         String subject = null;
         if (editable != null) subject = editable.toString().trim();
         //章节
-        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
-        int subType = viewBinding.bsTypes.getSelectedItemPosition();
+        // FIXME: 2026/7/12 下一版本修复 viewBinding.bs.getSelectedItemPosition() 初始化=-1的问题
+        int chapter = viewBinding.bsChapters.getVisibility() == View.VISIBLE ? Math.max(0, viewBinding.bsChapters.getSelectedItemPosition()) : -1;
+        // FIXME: 2026/7/12 下一版本修复 viewBinding.bs.getSelectedItemPosition() 初始化=-1的问题
+        int subType = Math.max(0, viewBinding.bsTypes.getSelectedItemPosition());
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(subject, chapter, subType, page, SIZE);
 

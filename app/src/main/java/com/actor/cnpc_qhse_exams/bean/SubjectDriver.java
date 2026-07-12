@@ -34,7 +34,16 @@ public class SubjectDriver {
     private Long   id;      //表id(从0开始, 自增长. 如果自增长=true, 必须是Long)
 
     /**
+     * 題目版本
+     */
+    private long version;
+
+    /**
      * 章节类型: 1~7
+     * -1: 没有章节，第2版本添加的题目全部 = -1
+     * 0 : 全部全部，{@link com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils#selectPage(String, int, int, int, int)}
+     * 1~7：正常章节
+     *
      * 11: 第一章 交通安全法律法规  一、单选题
      * 12: 第一章 交通安全法律法规  二、多选题
      * 13: 第一章 交通安全法律法规  三、判断题
@@ -61,6 +70,7 @@ public class SubjectDriver {
 
     /**
      * 题目类型: 1~3
+     * 0 ：全部
      * 一、单选题
      * 二、多选题
      * 三、判断题
@@ -84,7 +94,7 @@ public class SubjectDriver {
      * 题目图片
      */
     @Nullable
-    private String SubjectImage;
+    private String subjectImage;
 
     /**
      * 选项
@@ -119,10 +129,11 @@ public class SubjectDriver {
     public SubjectDriver() {
     }
 
-    public SubjectDriver(int chapterType, int subjectType, @Nullable String testPoint,
+    public SubjectDriver(long version, int chapterType, int subjectType, @Nullable String testPoint,
                          @NotNull @NonNull String subject, @Nullable String options,
                          @NotNull @NonNull String answer, @Nullable String analysis
     ) {
+        this.version = version;
         this.chapterType = chapterType;
         this.subjectType = subjectType;
         this.testPoint = testPoint;
@@ -205,10 +216,18 @@ public class SubjectDriver {
     }
 
     public String getSubjectImage() {
-        return this.SubjectImage;
+        return this.subjectImage;
     }
 
-    public void setSubjectImage(String SubjectImage) {
-        this.SubjectImage = SubjectImage;
+    public void setSubjectImage(String subjectImage) {
+        this.subjectImage = subjectImage;
+    }
+
+    public long getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

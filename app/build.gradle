@@ -16,8 +16,8 @@ android {
         applicationId "com.actor.cnpc_qhse_exams"
         minSdk 24
         targetSdk 33
-        versionCode 20260413
-        versionName "1.3"
+        versionCode 20260712
+        versionName "1.4"
     }
 
     compileOptions {

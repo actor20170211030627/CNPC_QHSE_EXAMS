@@ -10,6 +10,7 @@ import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.cnpc_qhse_exams.databinding.ActivityExamBinding;
 import com.actor.cnpc_qhse_exams.dialog.ExamSettingDialog;
 import com.actor.cnpc_qhse_exams.dialog.RightWrongDialog;
+import com.actor.cnpc_qhse_exams.global.Global;
 import com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils;
 import com.actor.myandroidframework.utils.audio.MediaPlayerUtils;
 import com.actor.myandroidframework.utils.toaster.ToasterUtils;
@@ -24,9 +25,6 @@ import java.util.List;
  */
 public class ExamActivity extends BaseActivity<ActivityExamBinding> {
 
-    public static final String CHAPTER = "CHAPTER";
-    public static final String      TYPE     = "TYPE";
-
     private int position = 0, dataSize = 0;
     private boolean isPlayVoice = true;
 
@@ -40,16 +38,16 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
 
     public static void start(BaseActivity<?> activity, View v, int chapter, int type) {
         activity.startActivity(new Intent(activity, ExamActivity.class)
-                .putExtra(CHAPTER, chapter)
-                .putExtra(TYPE, type), v);
+                .putExtra(Global.CHAPTER, chapter)
+                .putExtra(Global.TYPE, type), v);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        int chapter = intent.getIntExtra(CHAPTER, 0);
-        int type = intent.getIntExtra(TYPE, 0);
+        int chapter = intent.getIntExtra(Global.CHAPTER, 0);
+        int type = intent.getIntExtra(Global.TYPE, 0);
 
         viewBinding.ivBack.setOnClickListener(v -> onBackPressed());
         viewBinding.ivSetting.setOnClickListener(v -> {

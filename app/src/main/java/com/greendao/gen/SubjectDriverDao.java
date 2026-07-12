@@ -25,15 +25,16 @@ public class SubjectDriverDao extends AbstractDao<SubjectDriver, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property ChapterType = new Property(1, int.class, "chapterType", false, "CHAPTER_TYPE");
-        public final static Property SubjectType = new Property(2, int.class, "subjectType", false, "SUBJECT_TYPE");
-        public final static Property TestPoint = new Property(3, String.class, "testPoint", false, "TEST_POINT");
-        public final static Property Subject = new Property(4, String.class, "subject", false, "SUBJECT");
-        public final static Property SubjectImage = new Property(5, String.class, "SubjectImage", false, "SUBJECT_IMAGE");
-        public final static Property Options = new Property(6, String.class, "options", false, "OPTIONS");
-        public final static Property OptionImages = new Property(7, String.class, "optionImages", false, "OPTION_IMAGES");
-        public final static Property Answer = new Property(8, String.class, "answer", false, "ANSWER");
-        public final static Property Analysis = new Property(9, String.class, "analysis", false, "ANALYSIS");
+        public final static Property Version = new Property(1, long.class, "version", false, "VERSION");
+        public final static Property ChapterType = new Property(2, int.class, "chapterType", false, "CHAPTER_TYPE");
+        public final static Property SubjectType = new Property(3, int.class, "subjectType", false, "SUBJECT_TYPE");
+        public final static Property TestPoint = new Property(4, String.class, "testPoint", false, "TEST_POINT");
+        public final static Property Subject = new Property(5, String.class, "subject", false, "SUBJECT");
+        public final static Property SubjectImage = new Property(6, String.class, "subjectImage", false, "SUBJECT_IMAGE");
+        public final static Property Options = new Property(7, String.class, "options", false, "OPTIONS");
+        public final static Property OptionImages = new Property(8, String.class, "optionImages", false, "OPTION_IMAGES");
+        public final static Property Answer = new Property(9, String.class, "answer", false, "ANSWER");
+        public final static Property Analysis = new Property(10, String.class, "analysis", false, "ANALYSIS");
     }
 
 
@@ -50,15 +51,16 @@ public class SubjectDriverDao extends AbstractDao<SubjectDriver, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"Subject_Driver\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"CHAPTER_TYPE\" INTEGER NOT NULL ," + // 1: chapterType
-                "\"SUBJECT_TYPE\" INTEGER NOT NULL ," + // 2: subjectType
-                "\"TEST_POINT\" TEXT," + // 3: testPoint
-                "\"SUBJECT\" TEXT NOT NULL ," + // 4: subject
-                "\"SUBJECT_IMAGE\" TEXT," + // 5: SubjectImage
-                "\"OPTIONS\" TEXT," + // 6: options
-                "\"OPTION_IMAGES\" TEXT," + // 7: optionImages
-                "\"ANSWER\" TEXT NOT NULL ," + // 8: answer
-                "\"ANALYSIS\" TEXT);"); // 9: analysis
+                "\"VERSION\" INTEGER NOT NULL ," + // 1: version
+                "\"CHAPTER_TYPE\" INTEGER NOT NULL ," + // 2: chapterType
+                "\"SUBJECT_TYPE\" INTEGER NOT NULL ," + // 3: subjectType
+                "\"TEST_POINT\" TEXT," + // 4: testPoint
+                "\"SUBJECT\" TEXT NOT NULL ," + // 5: subject
+                "\"SUBJECT_IMAGE\" TEXT," + // 6: subjectImage
+                "\"OPTIONS\" TEXT," + // 7: options
+                "\"OPTION_IMAGES\" TEXT," + // 8: optionImages
+                "\"ANSWER\" TEXT NOT NULL ," + // 9: answer
+                "\"ANALYSIS\" TEXT);"); // 10: analysis
     }
 
     /** Drops the underlying database table. */
@@ -75,34 +77,35 @@ public class SubjectDriverDao extends AbstractDao<SubjectDriver, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getChapterType());
-        stmt.bindLong(3, entity.getSubjectType());
+        stmt.bindLong(2, entity.getVersion());
+        stmt.bindLong(3, entity.getChapterType());
+        stmt.bindLong(4, entity.getSubjectType());
  
         String testPoint = entity.getTestPoint();
         if (testPoint != null) {
-            stmt.bindString(4, testPoint);
+            stmt.bindString(5, testPoint);
         }
-        stmt.bindString(5, entity.getSubject());
+        stmt.bindString(6, entity.getSubject());
  
-        String SubjectImage = entity.getSubjectImage();
-        if (SubjectImage != null) {
-            stmt.bindString(6, SubjectImage);
+        String subjectImage = entity.getSubjectImage();
+        if (subjectImage != null) {
+            stmt.bindString(7, subjectImage);
         }
  
         String options = entity.getOptions();
         if (options != null) {
-            stmt.bindString(7, options);
+            stmt.bindString(8, options);
         }
  
         String optionImages = entity.getOptionImages();
         if (optionImages != null) {
-            stmt.bindString(8, optionImages);
+            stmt.bindString(9, optionImages);
         }
-        stmt.bindString(9, entity.getAnswer());
+        stmt.bindString(10, entity.getAnswer());
  
         String analysis = entity.getAnalysis();
         if (analysis != null) {
-            stmt.bindString(10, analysis);
+            stmt.bindString(11, analysis);
         }
     }
 
@@ -114,34 +117,35 @@ public class SubjectDriverDao extends AbstractDao<SubjectDriver, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getChapterType());
-        stmt.bindLong(3, entity.getSubjectType());
+        stmt.bindLong(2, entity.getVersion());
+        stmt.bindLong(3, entity.getChapterType());
+        stmt.bindLong(4, entity.getSubjectType());
  
         String testPoint = entity.getTestPoint();
         if (testPoint != null) {
-            stmt.bindString(4, testPoint);
+            stmt.bindString(5, testPoint);
         }
-        stmt.bindString(5, entity.getSubject());
+        stmt.bindString(6, entity.getSubject());
  
-        String SubjectImage = entity.getSubjectImage();
-        if (SubjectImage != null) {
-            stmt.bindString(6, SubjectImage);
+        String subjectImage = entity.getSubjectImage();
+        if (subjectImage != null) {
+            stmt.bindString(7, subjectImage);
         }
  
         String options = entity.getOptions();
         if (options != null) {
-            stmt.bindString(7, options);
+            stmt.bindString(8, options);
         }
  
         String optionImages = entity.getOptionImages();
         if (optionImages != null) {
-            stmt.bindString(8, optionImages);
+            stmt.bindString(9, optionImages);
         }
-        stmt.bindString(9, entity.getAnswer());
+        stmt.bindString(10, entity.getAnswer());
  
         String analysis = entity.getAnalysis();
         if (analysis != null) {
-            stmt.bindString(10, analysis);
+            stmt.bindString(11, analysis);
         }
     }
 
@@ -160,15 +164,16 @@ public class SubjectDriverDao extends AbstractDao<SubjectDriver, Long> {
     @Override
     public void readEntity(Cursor cursor, SubjectDriver entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setChapterType(cursor.getInt(offset + 1));
-        entity.setSubjectType(cursor.getInt(offset + 2));
-        entity.setTestPoint(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setSubject(cursor.getString(offset + 4));
-        entity.setSubjectImage(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setOptions(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setOptionImages(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setAnswer(cursor.getString(offset + 8));
-        entity.setAnalysis(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setVersion(cursor.getLong(offset + 1));
+        entity.setChapterType(cursor.getInt(offset + 2));
+        entity.setSubjectType(cursor.getInt(offset + 3));
+        entity.setTestPoint(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setSubject(cursor.getString(offset + 5));
+        entity.setSubjectImage(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setOptions(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setOptionImages(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setAnswer(cursor.getString(offset + 9));
+        entity.setAnalysis(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
     
     @Override

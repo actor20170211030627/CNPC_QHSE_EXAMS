@@ -1,9 +1,9 @@
 package com.actor.cnpc_qhse_exams.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.actor.cnpc_qhse_exams.databinding.ActivityMainBinding;
+import com.actor.cnpc_qhse_exams.dialog.TypeSettingDialog;
 import com.actor.cnpc_qhse_exams.dialog.ChapterTypeSettingDialog;
 
 /**
@@ -17,16 +17,26 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewBinding.stvStudy.setOnClickListener(v -> {
-            startActivity(new Intent(this, StudyActivity.class), v);
+        viewBinding.stvStudy20250421.setOnClickListener(v -> {
+            StudyActivity.start(MainActivity.this, v, 0);
         });
-        viewBinding.stvExam.setOnClickListener(v -> {
+        viewBinding.stvExam20250421.setOnClickListener(v -> {
             new ChapterTypeSettingDialog(this, (chapter, type) -> {
                 ExamActivity.start(MainActivity.this, v, chapter, type);
             }).show();
         });
 
-//        TxtReadUtils.readTxt2SubjectDrivers();
+        //20260712 新版本
+        viewBinding.stvStudy20260712.setOnClickListener(v -> {
+            StudyActivity.start(MainActivity.this, v, -1);
+        });
+        viewBinding.stvExam20260712.setOnClickListener(v -> {
+            new TypeSettingDialog(this, (type) -> {
+                ExamActivity.start(MainActivity.this, v, -1, type);
+            }).show();
+        });
+
+//        TxtReadUtils.readTxt2SubjectDrivers(2025041501);
 //        /**
 //         * 写入版本信息
 //         */

@@ -36,5 +36,22 @@ public class MyApplication extends ActorApplication {
         if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
             AssetsUtils.copyFile2InternalDbsDir(true, dbName);
         }
+
+
+
+        /**
+         * 版本：20260712
+         * 将Excel转换成json，https://www.minifier.org/excel-to-json
+         */
+//        SubjectDriverDao driverDao = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
+        //单选题
+//        List<SubjectDriver> drivers_single = SubjectJsonUtils_2026071201.readJsonSingle();
+//        GreenDaoUtils.insertInTx(driverDao, drivers_single);
+        //多选题
+//        List<SubjectDriver> drivers_multi = SubjectJsonUtils_2026071201.readJsonMulti();
+//        GreenDaoUtils.insertInTx(driverDao, drivers_multi);
+        //判断题
+//        List<SubjectDriver> drivers_judge = SubjectJsonUtils_2026071201.readJsonJudge();
+//        GreenDaoUtils.insertInTx(driverDao, drivers_judge);
     }
 }

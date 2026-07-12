@@ -59,7 +59,7 @@ public class SubjectReadUtils {
      * @return
      */
     @NonNull
-    public static List<SubjectDriver> read2SelectList(List<String> list, int chapterType, int subjectType) {
+    public static List<SubjectDriver> read2SelectList(long version, List<String> list, int chapterType, int subjectType) {
         List<Integer> numberStartPos = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
@@ -83,12 +83,12 @@ public class SubjectReadUtils {
         for (int i = 0; i < numberStartPos.size() - 1; i++) {
             posStart = numberStartPos.get(i);
             posNext = numberStartPos.get(i + 1);
-            subjects.add(readListRange2Select(list, chapterType, subjectType, posStart, posNext));
+            subjects.add(readListRange2Select(version, list, chapterType, subjectType, posStart, posNext));
         }
         //最后1题
         posStart = numberStartPos.get(numberStartPos.size() - 1);
         posNext = list.size();
-        subjects.add(readListRange2Select(list, chapterType, subjectType, posStart, posNext));
+        subjects.add(readListRange2Select(version, list, chapterType, subjectType, posStart, posNext));
         return subjects;
     }
 
@@ -99,7 +99,7 @@ public class SubjectReadUtils {
      * @param posNext 下一题开始位置
      * @return
      */
-    public static SubjectDriver readListRange2Select(List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
+    public static SubjectDriver readListRange2Select(long version, List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
         //考核点                  标题号             标题             选项            答案
         String testPoint = null, subjectNum = null, subject = null, options = null, answer = null,
                 //标题里的答案             解析
@@ -178,7 +178,7 @@ public class SubjectReadUtils {
         if (sb.length() > 0) parse = sb.toString();
         sb.setLength(0);
 
-        return new SubjectDriver(chapterType, subjectType, testPoint, subject, options, answer, parse);
+        return new SubjectDriver(version, chapterType, subjectType, testPoint, subject, options, answer, parse);
     }
 
 
@@ -195,7 +195,7 @@ public class SubjectReadUtils {
      * 答文：正确
      * 解析：
      */
-    public static List<SubjectDriver> read2JudgeList(List<String> list, int chapterType, int subjectType) {
+    public static List<SubjectDriver> read2JudgeList(long version, List<String> list, int chapterType, int subjectType) {
         List<Integer> numberStartPos = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String item = list.get(i);
@@ -219,12 +219,12 @@ public class SubjectReadUtils {
         for (int i = 0; i < numberStartPos.size() - 1; i++) {
             posStart = numberStartPos.get(i);
             posNext = numberStartPos.get(i + 1);
-            subjects.add(readListRange2Judge(list, chapterType, subjectType, posStart, posNext));
+            subjects.add(readListRange2Judge(version, list, chapterType, subjectType, posStart, posNext));
         }
         //最后1题
         posStart = numberStartPos.get(numberStartPos.size() - 1);
         posNext = list.size();
-        subjects.add(readListRange2Judge(list, chapterType, subjectType, posStart, posNext));
+        subjects.add(readListRange2Judge(version, list, chapterType, subjectType, posStart, posNext));
         return subjects;
     }
 
@@ -235,7 +235,7 @@ public class SubjectReadUtils {
      * @param posNext 下一题开始位置
      * @return
      */
-    public static SubjectDriver readListRange2Judge(List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
+    public static SubjectDriver readListRange2Judge(long version, List<String> list, int chapterType, int subjectType, int posStart, int posNext) {
         //考核点                  标题号             标题            答案            解析
         String testPoint = null, subjectNum = null, subject = null, answer = null, parse = null;
         StringBuilder sb = new StringBuilder(200);
@@ -282,7 +282,7 @@ public class SubjectReadUtils {
         if (sb.length() > 0) parse = sb.toString();
         sb.setLength(0);
 
-        return new SubjectDriver(chapterType, subjectType, testPoint, subject, null, answer, parse);
+        return new SubjectDriver(version, chapterType, subjectType, testPoint, subject, null, answer, parse);
     }
 
 

@@ -48,13 +48,18 @@ public class SubjectSelectUtils {
         QueryBuilder<SubjectDriver> queryBuilder = DAO.queryBuilder()
                 .offset((page - 1) * size)
                 .limit(size);
-        if (TextUtils.isEmpty(subject) && chapter == 0 && subType == 0) return queryBuilder.list();
+//        if (TextUtils.isEmpty(subject) && chapter == 0 && subType == 0) return queryBuilder.list();
 
         if (!TextUtils.isEmpty(subject)) {
             queryBuilder.where(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
         }
-        //if选择了章节
-        if (chapter > 0) {
+        //if章节
+        if (chapter == 0) {
+            /**
+             * @see SubjectDriver#chapterType
+             */
+            queryBuilder.where(SubjectDriverDao.Properties.ChapterType.between(1, 7));
+        } else {
             queryBuilder.where(SubjectDriverDao.Properties.ChapterType.eq(chapter));
         }
         //if选择了类型
