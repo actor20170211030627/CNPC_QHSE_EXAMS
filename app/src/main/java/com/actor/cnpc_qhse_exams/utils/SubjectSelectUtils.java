@@ -8,8 +8,9 @@ import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.database.greendao.GreenDaoUtils;
 import com.greendao.gen.SubjectDriverDao;
 
-import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,8 @@ import java.util.List;
  */
 public class SubjectSelectUtils {
 
-    public static final SubjectDriverDao     DAO             = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
+    public static final SubjectDriverDao DAO = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
+    private static final List<WhereCondition> CONDS = new ArrayList<>(4);
 
 
     /**
@@ -45,27 +47,24 @@ public class SubjectSelectUtils {
      * @param size 每页多少条数据
      */
     public static List<SubjectDriver> selectPage(@Nullable String subject, int chapter, int subType, int page, int size) {
-        QueryBuilder<SubjectDriver> queryBuilder = DAO.queryBuilder()
-                .offset((page - 1) * size)
-                .limit(size);
-//        if (TextUtils.isEmpty(subject) && chapter == 0 && subType == 0) return queryBuilder.list();
-
         if (!TextUtils.isEmpty(subject)) {
-            queryBuilder.where(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
+            CONDS.add(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
         }
         //if章节
         if (chapter == 0) {
             /**
              * @see SubjectDriver#chapterType
              */
-            queryBuilder.where(SubjectDriverDao.Properties.ChapterType.between(1, 7));
+            CONDS.add(SubjectDriverDao.Properties.ChapterType.between(1, 7));
         } else {
-            queryBuilder.where(SubjectDriverDao.Properties.ChapterType.eq(chapter));
+            CONDS.add(SubjectDriverDao.Properties.ChapterType.eq(chapter));
         }
         //if选择了类型
         if (subType > 0) {
-            queryBuilder.where(SubjectDriverDao.Properties.SubjectType.eq(subType));
+            CONDS.add(SubjectDriverDao.Properties.SubjectType.eq(subType));
         }
-        return  queryBuilder.list();
+        List<SubjectDriver> subjectDrivers = GreenDaoUtils.queryPage(DAO, page, size, CONDS.toArray(new WhereCondition[CONDS.size()]));
+        CONDS.clear();
+        return subjectDrivers;
     }
 }

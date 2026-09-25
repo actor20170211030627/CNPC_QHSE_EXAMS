@@ -6,17 +6,26 @@ import android.text.Editable;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
+import androidx.annotation.NonNull;
+
 import com.actor.cnpc_qhse_exams.adapter.StudyAdapter;
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
 import com.actor.cnpc_qhse_exams.databinding.ActivityStudyBinding;
+import com.actor.cnpc_qhse_exams.dialog.ConfirmDialog;
+import com.actor.cnpc_qhse_exams.dialog.EasyWindowSubjects;
 import com.actor.cnpc_qhse_exams.dialog.StudySettingDialog;
 import com.actor.cnpc_qhse_exams.global.Global;
 import com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils;
+import com.actor.myandroidframework.recyclerview.BaseItemDecoration;
 import com.actor.myandroidframework.utils.BRVUtils;
 import com.actor.myandroidframework.utils.LogUtils;
-import com.actor.myandroidframework.widget.BaseItemDecoration;
+import com.actor.myandroidframework.utils.toaster.ToasterUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
+import com.hjq.window.EasyWindowManager;
 
 import java.util.List;
 
@@ -55,7 +64,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
                 if (isShow2Screen) {
                     judgePermissionAndShowWindow();
                 } else {
-//                    EasyWindow.recycleAllWindow();
+                    EasyWindowManager.recycleAllWindow();
                 }
             }).show();
         });
@@ -101,10 +110,8 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
         String subject = null;
         if (editable != null) subject = editable.toString().trim();
         //章节
-        // FIXME: 2026/7/12 下一版本修复 viewBinding.bs.getSelectedItemPosition() 初始化=-1的问题
-        int chapter = viewBinding.bsChapters.getVisibility() == View.VISIBLE ? Math.max(0, viewBinding.bsChapters.getSelectedItemPosition()) : -1;
-        // FIXME: 2026/7/12 下一版本修复 viewBinding.bs.getSelectedItemPosition() 初始化=-1的问题
-        int subType = Math.max(0, viewBinding.bsTypes.getSelectedItemPosition());
+        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
+        int subType = viewBinding.bsTypes.getSelectedItemPosition();
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(subject, chapter, subType, page, SIZE);
 
@@ -121,27 +128,27 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
      * 判断权限 & 显示全局浮窗
      */
     private void judgePermissionAndShowWindow() {
-//        if (XXPermissions.isGranted(this, Permission.SYSTEM_ALERT_WINDOW)) {
-//            new EasyWindowSubjects().show();
-//        } else {
-//            new ConfirmDialog(this, "权限申请说明",
-//                    "显示悬浮窗需要申请权限, 否则不能显示到其它应用上.",
-//                    isConfirmClick -> {
-//                if (!isConfirmClick) return;
-//                XXPermissions.with(mActivity)
-//                        .permission(Permission.SYSTEM_ALERT_WINDOW)
-//                        .request(new OnPermissionCallback() {
-//                            @Override
-//                            public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
-//                                new EasyWindowSubjects().show();
-//                            }
-//                            @Override
-//                            public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {
-//                                OnPermissionCallback.super.onDenied(permissions, doNotAskAgain);
-//                                ToasterUtils.warning("您拒绝了权限!");
-//                            }
-//                        });
-//                }).show();
-//        }
+        if (XXPermissions.isGranted(this, Permission.SYSTEM_ALERT_WINDOW)) {
+            new EasyWindowSubjects().show();
+        } else {
+            new ConfirmDialog(this, "权限申请说明",
+                    "显示悬浮窗需要申请权限, 否则不能显示到其它应用上.",
+                    isConfirmClick -> {
+                if (!isConfirmClick) return;
+                XXPermissions.with(mActivity)
+                        .permission(Permission.SYSTEM_ALERT_WINDOW)
+                        .request(new OnPermissionCallback() {
+                            @Override
+                            public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
+                                new EasyWindowSubjects().show();
+                            }
+                            @Override
+                            public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {
+                                OnPermissionCallback.super.onDenied(permissions, doNotAskAgain);
+                                ToasterUtils.warning("您拒绝了权限!");
+                            }
+                        });
+                }).show();
+        }
     }
 }

@@ -76,10 +76,6 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
         //禁止用户左右滑动
         viewBinding.viewPager2.setUserInputEnabled(false);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(null, chapter, type);
-        // TODO: 2026/4/12 查同样的题型, 为何isShowAnswer状态有缓存???
-        for (SubjectDriver subjectDriver : subjectDrivers) {
-            subjectDriver.isShowAnswer = false;
-        }
         dataSize = subjectDrivers.size();
         mAdapter.setList(subjectDrivers);
     }

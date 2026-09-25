@@ -83,25 +83,25 @@ dependencies {
      * Github开源框架
      */
     //https://github.com/actor20170211030627/MyAndroidFrameWork
-    implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.0.5') {
+    implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.1') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.code.gson', module: 'gson'
 //        exclude group: 'com.github.bumptech.glide', module: 'glide'
-        exclude group: 'com.github.getActivity', module: 'XXPermissions'
+//        exclude group: 'com.github.getActivity', module: 'XXPermissions'
         exclude group: 'com.github.getActivity', module: 'EasyHttp'
         exclude group: 'com.tencent', module: 'mmkv-static'
         exclude group: 'com.github.li-xiaojun', module: 'XPopup'
     }
     //图片选择
-//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:picture_selector:2.2.0.5'
-    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:database:2.2.0.5'
-//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:others:2.2.0.5'
+//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:picture_selector:2.2.1'
+    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:database:2.2.1'
+//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:others:2.2.1'
 
     //https://github.com/greenrobot/greenDAO
     implementation 'org.greenrobot:greendao:3.3.0' // add library
 
     // 悬浮窗框架：https://github.com/getActivity/EasyWindow
-//    implementation 'com.github.getActivity:EasyWindow:11.3'
+    implementation 'com.github.getActivity:EasyWindow:15.8'
 }
 
 static def buildTime() {

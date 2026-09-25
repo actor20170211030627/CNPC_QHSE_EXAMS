@@ -40,8 +40,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!--android:drawableEnd="@drawable/icon_search_gray"
-    -->
     <com.hjq.shape.view.ShapeEditText
         android:id="@+id/set_search"
         android:layout_width="0dp"

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.actor.cnpc_qhse_exams.databinding.DialogStudySettingBinding;
 import com.actor.myandroidframework.dialog.ViewBindingDialog;
 import com.blankj.utilcode.util.SizeUtils;
+import com.hjq.window.EasyWindowManager;
 
 /**
  * description: 描述
@@ -66,7 +67,7 @@ public class StudySettingDialog extends ViewBindingDialog<DialogStudySettingBind
         viewBinding.tvShowTestPoint.setSelected(isShowTestPoint);
         viewBinding.tvShowAnswer.setSelected(isShowAnswer);
         viewBinding.tvShowAnalysis.setSelected(isShowAnalysis);
-//        viewBinding.tvShowScreen.setSelected(EasyWindow.existWindowShowingByClass(EasyWindowSubjects.class));
+        viewBinding.tvShowScreen.setSelected(EasyWindowManager.existWindowShowingByClass(EasyWindowSubjects.class));
     }
 
     public interface OnConfirmClickListener {

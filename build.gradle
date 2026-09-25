@@ -21,7 +21,6 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url 'D://repository' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public' }
@@ -38,7 +37,7 @@ buildscript {
 //        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
 //        classpath 'com.huawei.agconnect:agcp:1.7.3.300'
 
-        classpath("org.greenrobot:greendao-gradle-plugin:3.3.0")
+        classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
     }
 }
 

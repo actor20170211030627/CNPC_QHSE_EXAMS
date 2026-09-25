@@ -74,7 +74,7 @@ public class TxtReadUtils {
      *
      *
      * 24.【考核点：层级+专业；题型：单选题；难度：中；类型：专业】 //5608行
-     * （A）类火灾是指（ ）火灾。                                //这一行是标题, 将"A" 改成 "Ą", 否则读取不到标题
+     * （A）类火灾是指（ ）火灾。                                //这一行是标题!!!!!
      * （A）固体物质；
      * （B）液体；
      * （C）气体；
@@ -130,7 +130,8 @@ public class TxtReadUtils {
         List<String> lines = new ArrayList<>(splits.length);
         for (String s : splits) {
             String split = s.trim();
-            if (!split.isEmpty()) lines.add(split);
+            if (split.isEmpty()) continue;
+            lines.add(split);
         }
 
         //遍历 & 判断题目类型
@@ -202,6 +203,14 @@ public class TxtReadUtils {
             if (chapterType == 7 && subjectType == 1) { list71.add(line); continue; }
             if (chapterType == 7 && subjectType == 2) { list72.add(line); continue; }
             if (chapterType == 7 && subjectType == 3) { list73.add(line); continue; }
+        }
+
+        //处理错误标题, 将"A" 改成 "Ą", 否则遍历的时候找不到标题
+        for (int i = 0; i < list71.size(); i++) {
+            if ("（A）类火灾是指（ ）火灾。".equals(list71.get(i))) {
+                list71.set(i, "（Ą）类火灾是指（ ）火灾。");
+                break;
+            }
         }
 
         //读取成题目
@@ -278,15 +287,15 @@ public class TxtReadUtils {
          * 查询字段不应该为空但实际为空的item
          * SELECT * FROM SUBJECT_DRIVER WHERE CHAPTER_TYPE = 0 OR SUBJECT_TYPE = 0 OR SUBJECT IS NULL OR TRIM(SUBJECT) = '' OR ANSWER IS NULL OR TRIM(ANSWER) = '';
          */
-        String sql = TextUtils2.getStringFormat("WHERE %s = 0 OR %s = 0 OR %s IS NULL OR TRIM(%s) = '' OR %s IS NULL OR TRIM(%s) = ''",
-                SubjectDriverDao.Properties.ChapterType.columnName,
-                SubjectDriverDao.Properties.SubjectType.columnName,
-                SubjectDriverDao.Properties.Subject.columnName,
-                SubjectDriverDao.Properties.Subject.columnName,
-                SubjectDriverDao.Properties.Answer.columnName,
-                SubjectDriverDao.Properties.Answer.columnName
-        );
-        List<SubjectDriver> emptyIssueList = GreenDaoUtils.queryRawCreate(SubjectSelectUtils.DAO, sql).list();
+        List<SubjectDriver> emptyIssueList  = SubjectSelectUtils.DAO.queryBuilder()
+                .whereOr(
+                        SubjectDriverDao.Properties.ChapterType.eq(0),
+                        SubjectDriverDao.Properties.SubjectType.eq(0),
+                        SubjectDriverDao.Properties.Subject.isNull(),
+                        GreenDaoUtils.getStringCondition("TRIM(" + SubjectDriverDao.Properties.Subject.columnName + ") = ''"),
+                        SubjectDriverDao.Properties.Answer.isNull(),
+                        GreenDaoUtils.getStringCondition("TRIM(" + SubjectDriverDao.Properties.Answer.columnName + ") = ''")
+                ).list();
         for (SubjectDriver listOption : emptyIssueList) {
             LogUtils.errorFormat("有字段不该为空, 但为空: id=%d, subject=%s", listOption.getId(), listOption.getSubject());
         }

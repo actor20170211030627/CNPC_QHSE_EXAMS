@@ -25,7 +25,8 @@ public class RightWrongDialog extends ViewBindingDialog<DialogRightWrongBinding>
         //即使在xml中设置宽高=150dp, 显示出来还是很窄, 原因???
 //        setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         setWidth(SizeUtils.dp2px(50));
-        isStatusBarDimmed(false);
+        setDimEnable(false);
+        setClickThrough(true);
         AppCompatImageView iv = viewBinding.getRoot();
         iv.setImageResource(isRight ? R.drawable.icon_right_blue_circle : R.drawable.icon_wrong_red_circle2);
         iv.setOnClickListener(v -> dismiss());

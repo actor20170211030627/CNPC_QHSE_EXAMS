@@ -11,15 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.actor.cnpc_qhse_exams.R;
 import com.actor.cnpc_qhse_exams.bean.SubjectDriver;
+import com.actor.myandroidframework.recyclerview.BaseItemDecoration;
 import com.actor.myandroidframework.utils.TextUtils2;
 import com.actor.myandroidframework.utils.glide.GlideUtils;
-import com.actor.myandroidframework.widget.BaseItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.module.BaseLoadMoreModule;
-import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

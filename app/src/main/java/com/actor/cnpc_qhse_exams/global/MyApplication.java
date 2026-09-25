@@ -5,7 +5,6 @@ import com.actor.database.greendao.GreenDaoUtils;
 import com.actor.myandroidframework.application.ActorApplication;
 import com.actor.myandroidframework.utils.AssetsUtils;
 import com.actor.myandroidframework.utils.ConfigUtils;
-import com.actor.myandroidframework.utils.TextUtils2;
 import com.blankj.utilcode.util.AppUtils;
 import com.greendao.gen.DBVersionDao;
 
@@ -24,14 +23,10 @@ public class MyApplication extends ActorApplication {
         super.onCreate();
         String dbName = "cnpc_qhse.db3";
         AssetsUtils.copyFile2InternalDbsDir(false, dbName);
-        GreenDaoUtils.init(this, ConfigUtils.IS_APP_DEBUG, dbName, null);
+        GreenDaoUtils.init(this, ConfigUtils.IS_APP_DEBUG, dbName, null, false, null);
         DBVersionDao dao = GreenDaoUtils.getDaoSession().getDBVersionDao();
-        String sql = TextUtils2.getStringFormat("WHERE %s = (SELECT MAX(%s) FROM %s)",
-                DBVersionDao.Properties.VersionCode.columnName,
-                DBVersionDao.Properties.VersionCode.columnName,
-                DBVersionDao.TABLENAME
-        );
-        DBVersion dbVersion = GreenDaoUtils.queryRawCreate(dao, sql).unique();
+        DBVersion dbVersion = GreenDaoUtils.queryMaxUnique(dao, DBVersionDao.Properties.VersionCode);
+
         //每一个版本都重新copy一次数据库
         if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
             AssetsUtils.copyFile2InternalDbsDir(true, dbName);

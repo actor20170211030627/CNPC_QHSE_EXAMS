@@ -94,7 +94,7 @@ public class StudyAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, SubjectDriver item, List<?> payloads) {
+    protected void convert(@NonNull BaseViewHolder holder, SubjectDriver item, @NonNull List<?> payloads) {
         super.convert(holder, item, payloads);
         if (!payloads.isEmpty()) {
             Object isShowAnswer = payloads.get(0);
@@ -136,6 +136,10 @@ public class StudyAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder
 
     public boolean isShowTestPoint() {
         return isShowTestPoint;
+    }
+
+    public void setShowAnswer(boolean showAnswer) {
+        isShowAnswer = showAnswer;
     }
 
     public boolean isShowAnswer() {
