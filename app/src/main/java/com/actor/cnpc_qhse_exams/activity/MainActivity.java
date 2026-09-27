@@ -2,9 +2,20 @@ package com.actor.cnpc_qhse_exams.activity;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import com.actor.cnpc_qhse_exams.databinding.ActivityMainBinding;
-import com.actor.cnpc_qhse_exams.dialog.TypeSettingDialog;
 import com.actor.cnpc_qhse_exams.dialog.ChapterTypeSettingDialog;
+import com.actor.cnpc_qhse_exams.dialog.TypeSettingDialog;
+import com.actor.cnpc_qhse_exams.dialog.UpdateDialog;
+import com.actor.cnpc_qhse_exams.global.Global;
+import com.actor.myandroidframework.utils.MMKVUtils;
+import com.actor.myandroidframework.utils.toaster.ToasterUtils;
+import com.actor.pgyer.PgyerApi20Utils;
+import com.actor.pgyer.bean.AppCheckBean;
+import com.blankj.utilcode.util.AppUtils;
+import com.hjq.http.listener.OnHttpListener;
+import com.tencent.mmkv.MMKV;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -35,6 +46,27 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
                 ExamActivity.start(MainActivity.this, v, -1, type);
             }).show();
         });
+
+        if (!MMKVUtils.getBoolean(Global.IS_CHECK_UPDATE)) {
+            PgyerApi20Utils.init(Global.API_KEY, Global.APP_KEY);
+            PgyerApi20Utils.appCheck(this, AppUtils.getAppVersionName(), null, new OnHttpListener<AppCheckBean.AppCheckResponse>() {
+                @Override
+                public void onHttpSuccess(@NonNull AppCheckBean.AppCheckResponse result) {
+                    MMKVUtils.putBoolean(Global.IS_CHECK_UPDATE, true, MMKV.ExpireInDay);
+                    if (result.isSuccess()) {
+                        if (result.data == null) return;
+                        if (result.data.buildHaveNewVersion || result.data.buildVersionNo > AppUtils.getAppVersionCode()) {
+                            new UpdateDialog(mActivity, result.data).show();
+                        }
+                    } else {
+                        ToasterUtils.warning(result.message);
+                    }
+                }
+                @Override
+                public void onHttpFail(@NonNull Throwable throwable) {
+                }
+            });
+        }
 
 //        TxtReadUtils.readTxt2SubjectDrivers(2025041501);
 //        /**

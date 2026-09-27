@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_white_rocket_blue"
+    tools:context=".dialog.UpdateDialog"
+    tools:layout_width="300dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:text="发现新版本"
+        android:textColor="#ff333333"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="#ff333333"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tv1"
+        app:layout_constraintTop_toBottomOf="@id/tv1"
+        app:shape_radiusInBottomLeft="8dp"
+        app:shape_radiusInTopRight="8dp"
+        app:shape_solidGradientEndColor="#C2FDFD"
+        app:shape_solidGradientOrientation="leftToRight"
+        app:shape_solidGradientStartColor="#B4D4F0"
+        tools:text="V2.02.25" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="5dp"
+        android:lineSpacingExtra="5dp"
+        android:textColor="#ff666666"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/stv_version"
+        tools:text="1、更新内容更新内容更新内容更新内容。\n
+2、更新内容更新内容更新内容更新内容。\n
+3、更新内容更新内容更新内容更新内容." />
+
+    <!--220/280=0.78571428571428571428571428571429-->
+    <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"
+        app:layout_constraintWidth_percent="0.78571428571428571428571428571429"
+        app:rcBackgroundColor="#E9ECF0"
+        app:rcBackgroundPadding="0dp"
+        app:rcMax="100"
+        app:rcProgress="0"
+        app:rcProgressColor="#F4961C"
+        app:rcSecondaryProgress="0"
+        app:rcSecondaryProgressColor="#E9ECF0"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/fl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintWidth_percent="0.78571428571428571428571428571429">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!--100/280=0.35714285714285714285714285714286-->
+            <com.hjq.shape.view.ShapeTextView
+                android:id="@+id/stv_cancel"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="暂不更新"
+                android:textColor="#ff666666"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/stv_confirm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_content"
+                app:layout_constraintWidth_percent="0.35714285714285714285714285714286"
+                app:shape_radius="6dp"
+                app:shape_solidColor="#F5F5F2" />
+
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="1px" />
+
+            <com.hjq.shape.view.ShapeTextView
+                android:id="@+id/stv_confirm"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="立即更新"
+                android:textColor="#ffffffff"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/stv_cancel"
+                app:layout_constraintTop_toTopOf="@id/stv_cancel"
+                app:layout_constraintWidth_percent="0.35714285714285714285714285714286"
+                app:shape_radius="6dp"
+                app:shape_solidColor="#1FC39B" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/stv_confirm2"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:text="立即更新"
+            android:textColor="#ffffffff"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/stv_confirm"
+            app:layout_constraintStart_toStartOf="@id/stv_cancel"
+            app:layout_constraintTop_toTopOf="@id/stv_cancel"
+            app:shape_radius="6dp"
+            app:shape_solidColor="#1FC39B" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

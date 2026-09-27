@@ -69,6 +69,16 @@ android {
          daoPackage 'com.greendao.gen'
          targetGenDir 'src/main/java'    //生成数据库文件的目录(请确保是这个目录, 否则本工具类将无法使用)
     }
+
+    packagingOptions {
+//        exclude 'META-INF/**/*.version' //只删掉那些 .version 文件
+//        exclude 'META-INF/com/android/build/gradle/app-metadata.properties'   //删不掉, 由 Android Gradle 插件（AGP）在构建时强制生成，它的作用是向 Google Play 等平台声明你的 App 包含了哪些依赖库。从 AGP 4.0.0 版本开始，它就变成了一个强制环节。
+        exclude 'META-INF/**'   //** 匹配 META-INF/ 下所有层级的文件和文件夹
+        exclude 'META-INF/*'    // * 只匹配当前目录下的文件，不递归子目录
+        //*.kotlin_builtins 文件, 是 Kotlin 编译器的“地图”或“说明书”，用来定义 Int、String、Collection 等 Kotlin 内置类型的元数据。它们的主要作用是在编译期间帮助编译器正确理解类型，并生成最终的 .class 字节码。
+        exclude 'kotlin/**'
+        exclude 'kotlin/*'
+    }
 }
 
 dependencies {
@@ -85,17 +95,18 @@ dependencies {
      */
     //https://github.com/actor20170211030627/MyAndroidFrameWork
     implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.1') {
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-        exclude group: 'com.google.code.gson', module: 'gson'
+//        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+//        exclude group: 'com.google.code.gson', module: 'gson'
 //        exclude group: 'com.github.bumptech.glide', module: 'glide'
 //        exclude group: 'com.github.getActivity', module: 'XXPermissions'
-        exclude group: 'com.github.getActivity', module: 'EasyHttp'
-        exclude group: 'com.tencent', module: 'mmkv-static'
+//        exclude group: 'com.github.getActivity', module: 'EasyHttp'
+//        exclude group: 'com.tencent', module: 'mmkv-static'
         exclude group: 'com.github.li-xiaojun', module: 'XPopup'
     }
     //图片选择
 //    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:picture_selector:2.2.1'
     implementation 'com.github.actor20170211030627.MyAndroidFrameWork:database:2.2.1'
+    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:pgyer:1.0'
 //    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:others:2.2.1'
 
     //https://github.com/greenrobot/greenDAO
@@ -103,6 +114,9 @@ dependencies {
 
     // 悬浮窗框架：https://github.com/getActivity/EasyWindow
     implementation 'com.github.getActivity:EasyWindow:15.8'
+
+    //https://github.com/akexorcist/RoundCornerProgressBar 水平进度条
+    implementation 'com.akexorcist:round-corner-progress-bar:2.2.1'
 }
 
 static def buildTime() {

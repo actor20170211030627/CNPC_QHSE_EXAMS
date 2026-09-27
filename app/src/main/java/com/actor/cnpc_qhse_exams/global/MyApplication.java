@@ -5,8 +5,12 @@ import com.actor.database.greendao.GreenDaoUtils;
 import com.actor.myandroidframework.application.ActorApplication;
 import com.actor.myandroidframework.utils.AssetsUtils;
 import com.actor.myandroidframework.utils.ConfigUtils;
+import com.actor.myandroidframework.utils.easyhttp.EasyHttpConfigUtils;
+import com.actor.myandroidframework.utils.okhttputils.OkHttpConfigUtils;
 import com.blankj.utilcode.util.AppUtils;
 import com.greendao.gen.DBVersionDao;
+
+import okhttp3.OkHttpClient;
 
 /**
  * description: 描述
@@ -31,6 +35,10 @@ public class MyApplication extends ActorApplication {
         if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
             AssetsUtils.copyFile2InternalDbsDir(true, dbName);
         }
+
+        OkHttpClient.Builder builder = EasyHttpConfigUtils.initOkHttp(isAppDebug());
+        OkHttpClient okHttpClient = OkHttpConfigUtils.addLogInterceptor(builder, isAppDebug());
+        EasyHttpConfigUtils.init(isAppDebug(), Global.BASE_URL, okHttpClient);
 
 
 
