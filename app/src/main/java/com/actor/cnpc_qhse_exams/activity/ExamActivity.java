@@ -32,12 +32,13 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
     private final       ExamAdapter mAdapter = new ExamAdapter((position, id, isAnswerRight) -> {
         new RightWrongDialog(mActivity, isAnswerRight).show();
         if (isPlayVoice) {
-            MediaPlayerUtils.getInstance().playRaw(isAnswerRight ? R.raw.right : R.raw.wrong, null);
+            MediaPlayerUtils.withRaw(isAnswerRight ? R.raw.right : R.raw.wrong).play(null);
         }
     });
 
-    public static void start(BaseActivity<?> activity, View v, int chapter, int type) {
+    public static void start(BaseActivity<?> activity, View v, long version, int chapter, int type) {
         activity.startActivity(new Intent(activity, ExamActivity.class)
+                .putExtra(Global.VERSION, version)
                 .putExtra(Global.CHAPTER, chapter)
                 .putExtra(Global.TYPE, type), v);
     }
@@ -46,6 +47,7 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+        long version = intent.getLongExtra(Global.VERSION, -1L);
         int chapter = intent.getIntExtra(Global.CHAPTER, 0);
         int type = intent.getIntExtra(Global.TYPE, 0);
 
@@ -75,7 +77,7 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
         viewBinding.viewPager2.setAdapter(mAdapter);
         //禁止用户左右滑动
         viewBinding.viewPager2.setUserInputEnabled(false);
-        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(null, chapter, type);
+        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(version, null, chapter, type);
         dataSize = subjectDrivers.size();
         mAdapter.setList(subjectDrivers);
     }

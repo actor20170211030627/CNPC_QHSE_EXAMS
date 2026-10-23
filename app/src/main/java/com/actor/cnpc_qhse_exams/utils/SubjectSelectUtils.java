@@ -34,8 +34,8 @@ public class SubjectSelectUtils {
      * @param subType 题型
      * @return
      */
-    public static List<SubjectDriver> select(@Nullable String subject, int chapter, int subType) {
-        return selectPage(subject, chapter, subType, 1, Integer.MAX_VALUE);
+    public static List<SubjectDriver> select(long version, @Nullable String subject, int chapter, int subType) {
+        return selectPage(version, subject, chapter, subType, 1, Integer.MAX_VALUE);
     }
 
     /**
@@ -46,11 +46,12 @@ public class SubjectSelectUtils {
      * @param page 分页查询, 第几页, 从1开始
      * @param size 每页多少条数据
      */
-    public static List<SubjectDriver> selectPage(@Nullable String subject, int chapter, int subType, int page, int size) {
+    public static List<SubjectDriver> selectPage(long version, @Nullable String subject, int chapter, int subType, int page, int size) {
+        if (version >= 0) CONDS.add(SubjectDriverDao.Properties.Version.eq(version));
         if (!TextUtils.isEmpty(subject)) {
             CONDS.add(SubjectDriverDao.Properties.Subject.like("%" + subject + "%"));
         }
-        //if章节
+        //if全部章节
         if (chapter == 0) {
             /**
              * @see SubjectDriver#chapterType

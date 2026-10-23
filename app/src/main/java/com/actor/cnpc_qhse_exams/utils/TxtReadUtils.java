@@ -287,7 +287,7 @@ public class TxtReadUtils {
          * 查询字段不应该为空但实际为空的item
          * SELECT * FROM SUBJECT_DRIVER WHERE CHAPTER_TYPE = 0 OR SUBJECT_TYPE = 0 OR SUBJECT IS NULL OR TRIM(SUBJECT) = '' OR ANSWER IS NULL OR TRIM(ANSWER) = '';
          */
-        List<SubjectDriver> emptyIssueList  = SubjectSelectUtils.DAO.queryBuilder()
+        List<SubjectDriver> emptyIssueList  = GreenDaoUtils.queryBuilder(SubjectSelectUtils.DAO)
                 .whereOr(
                         SubjectDriverDao.Properties.ChapterType.eq(0),
                         SubjectDriverDao.Properties.SubjectType.eq(0),
@@ -306,10 +306,10 @@ public class TxtReadUtils {
          * 查询选项中有"答文"或"答案"的item
          * SELECT * FROM SUBJECT_DRIVER WHERE OPTIONS LIKE "%答文%" OR OPTIONS LIKE "%答案%";
          */
-        List<SubjectDriver> listOptions = GreenDaoUtils.queryList(SubjectSelectUtils.DAO,
-                SubjectDriverDao.Properties.Options.like("%答文%"),
-                SubjectDriverDao.Properties.Options.like("%答案%")
-        );
+        List<SubjectDriver> listOptions = GreenDaoUtils.queryBuilder(SubjectSelectUtils.DAO)
+                .whereOr(SubjectDriverDao.Properties.Options.like("%答文%"),
+                        SubjectDriverDao.Properties.Options.like("%答案%")
+                ).list();
         for (SubjectDriver listOption : listOptions) {
             LogUtils.errorFormat("读取有误: 选项中有\"答文\"or\"答案\": id=%d, subject=%s", listOption.getId(), listOption.getSubject());
         }

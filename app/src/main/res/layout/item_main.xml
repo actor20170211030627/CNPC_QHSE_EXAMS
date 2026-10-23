@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".adapter.MainAdapter">
+
+    <com.hjq.shape.view.ShapeView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_radius="10dp"
+        app:shape_shadowColor="@color/gray_bbbbbb"
+        app:shape_shadowOffsetX="3dp"
+        app:shape_shadowOffsetY="5dp"
+        app:shape_shadowSize="5dp"
+        app:shape_solidColor="@color/white"
+        tools:shape_shadowSize="0dp" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shape_radius="5dp"
+        app:shape_solidColor="@color/green_14B9C8"
+        tools:text="20250421" />
+
+    <com.actor.myandroidframework.widget.LineView
+        android:id="@+id/lv0"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/lv1"
+        app:layout_constraintEnd_toEndOf="@id/stv_date"
+        app:layout_constraintStart_toStartOf="@id/stv_date"
+        app:layout_constraintTop_toBottomOf="@id/stv_date"
+        app:lvDashGap="2dp"
+        app:lvDashWidth="5dp"
+        app:lvLineColor="@color/blue_5ECCFD"
+        app:lvOrientation="vertical" />
+
+    <com.actor.myandroidframework.widget.LineView
+        android:id="@+id/lv1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@id/stv_study"
+        app:layout_constraintEnd_toStartOf="@id/stv_study"
+        app:layout_constraintStart_toEndOf="@id/lv0"
+        app:layout_constraintTop_toTopOf="@id/stv_study"
+        app:lvDashGap="2dp"
+        app:lvDashWidth="5dp"
+        app:lvLineColor="@color/blue_5ECCFD" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_study"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp"
+        android:text="去学习"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_study"
+        app:layout_constraintBottom_toBottomOf="@id/sv"
+        app:layout_constraintStart_toEndOf="@id/stv_date"
+        app:layout_constraintTop_toTopOf="@id/sv"
+        app:shape_radius="99dp"
+        app:shape_shadowColor="#BB1D7981"
+        app:shape_shadowOffsetX="2dp"
+        app:shape_shadowOffsetY="2dp"
+        app:shape_shadowSize="2dp"
+        app:shape_solidColor="@color/green_14B9C8"
+        tools:shape_shadowSize="0dp" />
+
+    <com.actor.myandroidframework.widget.LineView
+        android:id="@+id/lv2"
+        android:layout_width="20dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toEndOf="@id/stv_study"
+        app:layout_constraintTop_toTopOf="@id/lv1"
+        app:lvDashGap="2dp"
+        app:lvDashWidth="5dp"
+        app:lvLineColor="@color/blue_5ECCFD" />
+
+    <com.hjq.shape.view.ShapeTextView
+        android:id="@+id/stv_exam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp"
+        android:text="去测试"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:transitionName="@string/transition_name_exam"
+        app:layout_constraintStart_toEndOf="@id/lv2"
+        app:layout_constraintTop_toTopOf="@id/stv_study"
+        app:shape_radius="99dp"
+        app:shape_shadowColor="#FF53859C"
+        app:shape_shadowOffsetX="2dp"
+        app:shape_shadowOffsetY="2dp"
+        app:shape_shadowSize="2dp"
+        app:shape_solidColor="@color/blue_5ECCFD"
+        tools:shape_shadowSize="0dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

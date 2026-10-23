@@ -42,10 +42,11 @@
         android:layout_marginTop="25dp"
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
-        android:entries="@array/chapters"
+        app:bsResource="@layout/item_textview_textcolor_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stv" />
+        app:layout_constraintTop_toBottomOf="@id/stv"
+        tools:entries="@array/chapters" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_types"
@@ -55,8 +56,11 @@
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
         app:bsEntriesString="题型: 全部,一、单选题,二、多选题,三、判断题"
-        app:layout_constraintStart_toStartOf="@id/bs_chapters"
-        app:layout_constraintTop_toBottomOf="@id/bs_chapters" />
+        app:bsResource="@layout/item_textview_textcolor_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bs_chapters"
+        app:layout_goneMarginTop="25dp" />
 
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_cancel"

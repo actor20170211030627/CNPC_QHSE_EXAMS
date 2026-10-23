@@ -2,12 +2,15 @@ package com.actor.cnpc_qhse_exams.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.actor.cnpc_qhse_exams.databinding.DialogChapterTypeSettingBinding;
 import com.actor.myandroidframework.dialog.ViewBindingDialog;
 import com.blankj.utilcode.util.SizeUtils;
+
+import java.util.List;
 
 /**
  * description: 章节 & 类型 设置
@@ -20,16 +23,23 @@ import com.blankj.utilcode.util.SizeUtils;
 public class ChapterTypeSettingDialog extends ViewBindingDialog<DialogChapterTypeSettingBinding> {
 
     private final OnConfirmClickListener listener;
+    private final long version;
+    private final List<String> chapters;
 
-    public ChapterTypeSettingDialog(@NonNull Context context, @NonNull OnConfirmClickListener listener) {
+    public ChapterTypeSettingDialog(@NonNull Context context, long version, List<String> chapters, @NonNull OnConfirmClickListener listener) {
         super(context);
         setWidthPercent(0.888888f, SizeUtils.dp2px(308f));
+        this.version = version;
+        this.chapters = chapters;
         this.listener = listener;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (chapters.isEmpty()) {
+            viewBinding.bsChapters.setVisibility(View.GONE);
+        } else viewBinding.bsChapters.setData(chapters);
         viewBinding.ivClose.setOnClickListener(v -> {
             dismiss();
         });
@@ -38,7 +48,7 @@ public class ChapterTypeSettingDialog extends ViewBindingDialog<DialogChapterTyp
         });
         viewBinding.stvYes.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onConfirmClick(viewBinding.bsChapters.getSelectedItemPosition(),
+                listener.onConfirmClick(version, viewBinding.bsChapters.getSelectedItemPosition(),
                         viewBinding.bsTypes.getSelectedItemPosition()
                 );
             }
@@ -47,6 +57,6 @@ public class ChapterTypeSettingDialog extends ViewBindingDialog<DialogChapterTyp
     }
 
     public interface OnConfirmClickListener {
-        void onConfirmClick(int chapter, int type);
+        void onConfirmClick(long version, int chapter, int type);
     }
 }

@@ -2,32 +2,20 @@
 <com.hjq.shape.layout.ShapeConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="330dp"
-    android:layout_height="240dp"
-    app:shape_radius="20dp"
-    app:shape_solidColor="#eee"
-    app:shape_strokeColor="@color/black"
+    android:layout_width="320dp"
+    android:layout_height="230dp"
+    app:shape_radius="10dp"
+    app:shape_solidColor="@color/white"
+    app:shape_strokeColor="@color/gray_999"
     app:shape_strokeSize="1dp"
     tools:context=".dialog.EasyWindowSubjects">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_close"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:padding="10dp"
-        android:src="@drawable/icon_close_black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.hjq.shape.view.ShapeEditText
         android:id="@+id/set_search"
         android:layout_width="0dp"
         android:layout_height="38dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="3dp"
         android:layout_marginEnd="10dp"
         android:gravity="center_vertical"
         android:hint="请输入要查询的题目"
@@ -38,10 +26,9 @@
         android:textColor="@color/gray_333"
         android:textColorHint="@color/gray_999"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/stv_search"
         app:layout_constraintEnd_toStartOf="@id/stv_search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/stv_search"
+        app:layout_constraintTop_toTopOf="parent"
         app:shape_radius="4dp"
         app:shape_strokeColor="#D2D2D2"
         app:shape_strokeSize="1dp" />
@@ -50,7 +37,7 @@
         android:id="@+id/iv_clear"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:padding="10dp"
+        android:padding="13dp"
         android:src="@drawable/icon_close_black"
         app:layout_constraintBottom_toBottomOf="@id/set_search"
         app:layout_constraintEnd_toEndOf="@id/set_search"
@@ -59,17 +46,29 @@
     <com.hjq.shape.view.ShapeTextView
         android:id="@+id/stv_search"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:padding="10dp"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="搜索"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/set_search"
+        app:layout_constraintEnd_toStartOf="@id/iv_close"
         app:layout_constraintStart_toEndOf="@id/set_search"
-        app:layout_constraintTop_toBottomOf="@id/iv_close"
+        app:layout_constraintTop_toTopOf="@id/set_search"
         app:shape_radius="5dp"
-        app:shape_solidColor="@color/red_D90000" />
+        app:shape_solidColor="#DA9D3F" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_close"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:padding="10dp"
+        android:src="@drawable/icon_close_black"
+        app:layout_constraintBottom_toBottomOf="@id/stv_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_chapters"
@@ -79,9 +78,10 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
-        android:entries="@array/chapters"
+        app:bsResource="@layout/item_textview_textcolor_white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/set_search" />
+        app:layout_constraintTop_toBottomOf="@id/set_search"
+        tools:entries="@array/chapters" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_types"
@@ -91,16 +91,31 @@
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
         app:bsEntriesString="题型: 全部,一、单选题,二、多选题,三、判断题"
+        app:bsResource="@layout/item_textview_textcolor_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bs_chapters" />
 
+    <com.hjq.shape.view.ShapeView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bs_types"
+        app:shape_radiusInBottomLeft="10dp"
+        app:shape_radiusInBottomRight="10dp"
+        app:shape_solidColor="#E8EFF3" />
+
+    <!-- bs_chapters 没数据高度会缩小, 所以在 bs_types 下方 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:padding="3dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bs_chapters"
+        app:layout_constraintTop_toBottomOf="@id/bs_types"
         tools:itemCount="1"
         tools:listitem="@layout/item_study_adapter" />
 </com.hjq.shape.layout.ShapeConstraintLayout>

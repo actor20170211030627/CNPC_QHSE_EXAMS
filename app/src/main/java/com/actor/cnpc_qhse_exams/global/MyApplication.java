@@ -4,7 +4,7 @@ import com.actor.cnpc_qhse_exams.bean.DBVersion;
 import com.actor.database.greendao.GreenDaoUtils;
 import com.actor.myandroidframework.application.ActorApplication;
 import com.actor.myandroidframework.utils.AssetsUtils;
-import com.actor.myandroidframework.utils.ConfigUtils;
+import com.actor.myandroidframework.utils.LogUtils;
 import com.actor.myandroidframework.utils.easyhttp.EasyHttpConfigUtils;
 import com.actor.myandroidframework.utils.okhttputils.OkHttpConfigUtils;
 import com.blankj.utilcode.util.AppUtils;
@@ -27,13 +27,19 @@ public class MyApplication extends ActorApplication {
         super.onCreate();
         String dbName = "cnpc_qhse.db3";
         AssetsUtils.copyFile2InternalDbsDir(false, dbName);
-        GreenDaoUtils.init(this, ConfigUtils.IS_APP_DEBUG, dbName, null, false, null);
+        GreenDaoUtils.init(this, isAppDebug(), dbName, null, isAppDebug(), null);
         DBVersionDao dao = GreenDaoUtils.getDaoSession().getDBVersionDao();
         DBVersion dbVersion = GreenDaoUtils.queryMaxUnique(dao, DBVersionDao.Properties.VersionCode);
 
         //每一个版本都重新copy一次数据库
         if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
-            AssetsUtils.copyFile2InternalDbsDir(true, dbName);
+            boolean isClosed = GreenDaoUtils.closeDatabase(dbName);
+            if (isClosed) {
+                AssetsUtils.copyFile2InternalDbsDir(true, dbName);
+                GreenDaoUtils.init(this, isAppDebug(), dbName, null, isAppDebug(), null);
+            } else {
+                LogUtils.error("关闭数据库失败!");
+            }
         }
 
         OkHttpClient.Builder builder = EasyHttpConfigUtils.initOkHttp(isAppDebug());

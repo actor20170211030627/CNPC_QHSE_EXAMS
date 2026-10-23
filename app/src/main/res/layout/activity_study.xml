@@ -7,6 +7,12 @@
     android:background="@color/white"
     tools:context=".activity.StudyActivity">
 
+    <com.actor.myandroidframework.widget.StatusBarHeightView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_back"
         android:layout_width="wrap_content"
@@ -15,7 +21,7 @@
         android:padding="18dp"
         android:src="@drawable/icon_arrow_left_black2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -37,7 +43,7 @@
         android:padding="13dp"
         android:src="@drawable/icon_setting"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar" />
 
 
     <com.hjq.shape.view.ShapeEditText
@@ -97,9 +103,10 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
-        android:entries="@array/chapters"
+        app:bsResource="@layout/item_textview_textcolor_white"
         app:layout_constraintStart_toStartOf="@id/set_search"
-        app:layout_constraintTop_toBottomOf="@id/set_search" />
+        app:layout_constraintTop_toBottomOf="@id/set_search"
+        tools:entries="@array/chapters" />
 
     <com.actor.myandroidframework.widget.BaseSpinner
         android:id="@+id/bs_types"
@@ -108,21 +115,37 @@
         android:background="@drawable/shape_drop_down_normal"
         android:dropDownVerticalOffset="50dp"
         app:bsEntriesString="题型: 全部,一、单选题,二、多选题,三、判断题"
+        app:bsResource="@layout/item_textview_textcolor_white"
         app:layout_constraintEnd_toEndOf="@id/stv_search"
         app:layout_constraintTop_toTopOf="@id/bs_chapters" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#E8EFF3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bs_types" />
+
+    <!-- bs_chapters 没数据高度会缩小, 所以在 bs_types 下方 -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bs_chapters">
+        app:layout_constraintBottom_toTopOf="@id/nbhv"
+        app:layout_constraintTop_toBottomOf="@id/bs_types">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_study_adapter" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.actor.cnpc_qhse_exams.global.NavigationBarHeightView
+        android:id="@+id/nbhv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

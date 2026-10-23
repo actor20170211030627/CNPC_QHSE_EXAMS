@@ -65,7 +65,7 @@ public class ExamAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder>
                 .setText(R.id.tv_answer, "答案：" + item.getAnswer())
                 .setVisible(R.id.tv_analysis, !isAnalysisEmpty && item.isShowAnswer)
                 .setText(R.id.tv_analysis, "解析：" + item.getAnalysis())
-                .setVisible(R.id.tv_test_point, !isTestPointEmpty)
+                .setGone(R.id.tv_test_point, isTestPointEmpty)
                 .setText(R.id.tv_test_point, "考核点：" + item.getTestPoint())
                 .setText(R.id.tv_word_pos_total, TextUtils2.getStringFormat("进度 %d/%d", position + 1, getDefItemCount()))
                 .getView(R.id.recycler_view)

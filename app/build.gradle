@@ -13,12 +13,13 @@ android {
     }
 
     defaultConfig {
+//        vectorDrawables.useSupportLibrary = true
         applicationId "com.actor.cnpc_qhse_exams"
         minSdk 24
         targetSdk 33
         //noinspection HighAppVersionCode
-        versionCode 2026092501
-        versionName "1.5"
+        versionCode 2026102301
+        versionName "1.6"
     }
 
     compileOptions {
@@ -94,7 +95,7 @@ dependencies {
      * Github开源框架
      */
     //https://github.com/actor20170211030627/MyAndroidFrameWork
-    implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.1') {
+    implementation ('com.github.actor20170211030627.MyAndroidFrameWork:library:2.2.2') {
 //        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
 //        exclude group: 'com.google.code.gson', module: 'gson'
 //        exclude group: 'com.github.bumptech.glide', module: 'glide'
@@ -104,10 +105,10 @@ dependencies {
         exclude group: 'com.github.li-xiaojun', module: 'XPopup'
     }
     //图片选择
-//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:picture_selector:2.2.1'
-    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:database:2.2.1'
+//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:picture_selector:2.2.2'
+    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:database:2.2.2'
+//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:others:2.2.2'
     implementation 'com.github.actor20170211030627.MyAndroidFrameWork:pgyer:1.0'
-//    implementation 'com.github.actor20170211030627.MyAndroidFrameWork:others:2.2.1'
 
     //https://github.com/greenrobot/greenDAO
     implementation 'org.greenrobot:greendao:3.3.0' // add library

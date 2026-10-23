@@ -9,14 +9,36 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp">
+        android:layout_height="match_parent">
+
+        <com.actor.myandroidframework.widget.LineView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lvGradientCenterColor="#EEFDFE"
+            app:lvGradientEndColor="#C5F8FB"
+            app:lvGradientStartColor="@color/white"
+            app:lvOrientation="bottomLeft2TopRight" />
+
+        <com.hjq.shape.view.ShapeView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_options"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shape_radius="10dp"
+            app:shape_shadowColor="@color/gray_bbbbbb"
+            app:shape_shadowOffsetX="3dp"
+            app:shape_shadowOffsetY="5dp"
+            app:shape_shadowSize="5dp"
+            app:shape_solidColor="@color/white"
+            tools:shape_shadowSize="0dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_test_point"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:textColor="@color/gray_999"
             android:textSize="15sp"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,10 +48,13 @@
             android:id="@+id/tv_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:textColor="@color/gray_333"
             android:textSize="17sp"
             app:layout_constraintTop_toBottomOf="@id/tv_test_point"
+            app:layout_goneMarginTop="10dp"
             tools:text="1.“道路”，是指（   ）、城市道路和虽在单位管辖范围但允许社会机动车通行的地方，包括广场、公共停车场等用于公众通行的场所。" />
 
         <!-- 770/272=2.8308823529411764705882352941176 -->
@@ -38,6 +63,8 @@
             android:id="@+id/iv_subject_image"
             android:layout_width="200dp"
             android:layout_height="100dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +76,9 @@
             android:id="@+id/tv_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingBottom="8dp"
             android:textColor="@color/gray_666"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,17 +153,22 @@
             app:layout_constraintStart_toStartOf="@id/tv_options"
             app:layout_constraintTop_toBottomOf="@id/tv_options" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.hjq.shape.view.ShapeTextView
             android:id="@+id/tv_word_pos_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:textColor="#ff53b765"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/gray_666"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv"
+            app:shape_radius="99dp"
+            app:shape_solidColor="#E2E9EF"
             tools:text="进度 0/10" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -169,6 +204,7 @@
             android:id="@+id/tv_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/red_D90000"
             android:textSize="15sp"
@@ -179,6 +215,7 @@
             android:id="@+id/tv_analysis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:textColor="@color/gray_999"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/tv_answer"

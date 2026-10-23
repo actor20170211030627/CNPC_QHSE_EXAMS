@@ -8,7 +8,6 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * description: 交通安全基层站队QHSE标准化建设—驾驶员应知应会题库
@@ -41,7 +40,7 @@ public class SubjectDriver {
     /**
      * 章节类型: 1~7
      * -1: 没有章节，第2版本添加的题目全部 = -1
-     * 0 : 全部全部，{@link com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils#selectPage(String, int, int, int, int)}
+     * 0 : 全部章节，{@link com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils#selectPage(String, int, int, int, int)}
      * 1~7：正常章节
      *
      * 11: 第一章 交通安全法律法规  一、单选题

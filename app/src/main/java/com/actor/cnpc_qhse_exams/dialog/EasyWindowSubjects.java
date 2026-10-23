@@ -1,8 +1,11 @@
 package com.actor.cnpc_qhse_exams.dialog;
 
 import android.content.Context;
+import android.hardware.display.DisplayManager;
+import android.os.Build;
 import android.text.Editable;
 import android.view.ContextThemeWrapper;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,17 +40,19 @@ import java.util.List;
  */
 public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implements OnWindowViewClickListener<View> {
 
-
+    private long version;
     private final StudyAdapter mAdapter = new StudyAdapter();
     private final int          SIZE     = 10;
-    private final com.actor.cnpc_qhse_exams.databinding.EasyWindowSubjectsBinding viewBinding;
+    private final EasyWindowSubjectsBinding viewBinding;
     private final int[] offsets = {-1, -1};
 
 
-    public EasyWindowSubjects() {
+    public EasyWindowSubjects(long version, List<String> chapters) {
         //会导致 ShapeEditText 点击没反应
         super(ConfigUtils.APPLICATION);
 //        super(getContextThemeWrapper(ConfigUtils.APPLICATION));
+        this.version = version;
+
         Context contextThemeWrapper = getContextThemeWrapper(ConfigUtils.APPLICATION);
 
 //        setContentView(R.layout.easy_window_subjects);
@@ -55,6 +60,10 @@ public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implement
         setContentView(view);
 //        setWindowSize((int) (ScreenUtils.getScreenWidth() * 0.92f), SizeUtils.dp2px(350f));
         viewBinding = EasyWindowSubjectsBinding.bind(getContentView());
+        viewBinding.bsChapters.setData(chapters);
+        if (chapters == null || chapters.isEmpty()) {
+            viewBinding.bsChapters.setVisibility(View.INVISIBLE);
+        }
         // 设置成可拖拽的
 //        setWindowDraggableRule()                    //随意移动
         setWindowDraggableRule(new SpringBackWindowDraggableRule());    //随意移动 & 自动靠边
@@ -108,7 +117,7 @@ public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implement
         int chapter = viewBinding.bsChapters.getSelectedItemPosition();
         int subType = viewBinding.bsTypes.getSelectedItemPosition();
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
-        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(subject, chapter, subType, page, SIZE);
+        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(version, subject, chapter, subType, page, SIZE);
         if (isRefresh) {
             mAdapter.setList(subjectDrivers);
         } else {
@@ -128,6 +137,9 @@ public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implement
                 break;
             case R.id.stv_search:
                 KeyboardUtils.hideSoftInput(view);
+                viewBinding.setSearch.clearFocus();
+                viewBinding.getRoot().setFocusableInTouchMode(true);
+                viewBinding.getRoot().requestFocus();
                 if (offsets[0] >= 0 && offsets[1] >= 0) {
                     setWindowLocation(offsets[0], offsets[1]);
                     offsets[0] = offsets[1] = -1;
@@ -146,9 +158,30 @@ public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implement
 //        }
     }
 
+    /**
+     * 当 context 是Application 的时候, spinnerMode=dialog点击无反应, spinnerMode=dropdown点击报错
+     * android.view.InflateException: Binary XML file line #19: Failed to resolve attribute at index 1: TypedValue{t=0x2/d=0x7f04015b a=-1}
+     * Caused by: java.lang.UnsupportedOperationException: Failed to resolve attribute at index 1: TypedValue{t=0x2/d=0x7f04015b a=-1}
+     *     at android.content.res.TypedArray.getLayoutDimension(TypedArray.java:816)
+     * 乺: 将 Application 包装成 ContextThemeWrapper, 让 Spinner 能够在 SYSTEM_ALERT_WINDOW 全局悬浮窗里也能够下拉
+     */
+    @NonNull
     private  /*static*/ Context getContextThemeWrapper(Context context) {
         if (context instanceof ContextThemeWrapper) return context;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) return context.createWindowContext(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, null);
-        return new ContextThemeWrapper(context, com.google.android.material.R.style.Theme_AppCompat_Light_NoActionBar);
+
+        // 1. 获取一个与 Display 关联的 Context
+        DisplayManager dm = (DisplayManager) context.getSystemService(Context.DISPLAY_SERVICE);
+        Display defaultDisplay = dm.getDisplay(Display.DEFAULT_DISPLAY);
+        Context displayContext = context.createDisplayContext(defaultDisplay); // 关键步骤
+        // 2. 从 displayContext 创建 WindowContext
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Context windowContext = displayContext.createWindowContext(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, null);
+            // 3. 应用主题
+            windowContext.setTheme(com.google.android.material.R.style.Theme_AppCompat_Light_NoActionBar);
+            return windowContext;
+        }
+
+        // Android R 以下，直接用 displayContext 包装主题即可
+        return new ContextThemeWrapper(displayContext, com.google.android.material.R.style.Theme_AppCompat_Light_NoActionBar);
     }
 }

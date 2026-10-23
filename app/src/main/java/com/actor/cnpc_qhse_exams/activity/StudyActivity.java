@@ -20,6 +20,7 @@ import com.actor.myandroidframework.recyclerview.BaseItemDecoration;
 import com.actor.myandroidframework.utils.BRVUtils;
 import com.actor.myandroidframework.utils.LogUtils;
 import com.actor.myandroidframework.utils.toaster.ToasterUtils;
+import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.hjq.permissions.OnPermissionCallback;
@@ -39,21 +40,26 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
 
     private final StudyAdapter mAdapter = new StudyAdapter();
     private final int          SIZE     = 10;
+    private long version;
+    private List<String> chapters;
 
-    public static void start(BaseActivity<?> activity, View v, int chapter) {
+    public static void start(BaseActivity<?> activity, View v, long version, List<String> chapters) {
         activity.startActivity(new Intent(activity, StudyActivity.class)
-                .putExtra(Global.CHAPTER, chapter), v);
+                .putExtra(Global.VERSION, version)
+                .putExtra(Global.CHAPTER, GsonUtils.toJson(chapters)), v);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        int chapter = intent.getIntExtra(Global.CHAPTER, 0);
+        version = intent.getLongExtra(Global.VERSION, -1L);
+        String json = intent.getStringExtra(Global.CHAPTER);
+        chapters = GsonUtils.fromJson(json, GsonUtils.getListType(String.class));
         //if没有章节类型
-        if (chapter == -1) {
+        if (chapters.isEmpty()) {
             viewBinding.bsChapters.setVisibility(View.INVISIBLE);
-        }
+        } else viewBinding.bsChapters.setData(chapters);
 
         viewBinding.ivBack.setOnClickListener(v -> onBackPressed());
 
@@ -113,7 +119,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
         int chapter = viewBinding.bsChapters.getSelectedItemPosition();
         int subType = viewBinding.bsTypes.getSelectedItemPosition();
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
-        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(subject, chapter, subType, page, SIZE);
+        List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(version, subject, chapter, subType, page, SIZE);
 
         viewBinding.swipeRefreshLayout.setRefreshing(false);
         if (isRefresh) {
@@ -129,7 +135,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
      */
     private void judgePermissionAndShowWindow() {
         if (XXPermissions.isGranted(this, Permission.SYSTEM_ALERT_WINDOW)) {
-            new EasyWindowSubjects().show();
+            new EasyWindowSubjects(version, chapters).show();
         } else {
             new ConfirmDialog(this, "权限申请说明",
                     "显示悬浮窗需要申请权限, 否则不能显示到其它应用上.",
@@ -140,7 +146,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
                         .request(new OnPermissionCallback() {
                             @Override
                             public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
-                                new EasyWindowSubjects().show();
+                                new EasyWindowSubjects(version, chapters).show();
                             }
                             @Override
                             public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {

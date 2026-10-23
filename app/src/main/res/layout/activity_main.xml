@@ -4,82 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".activity.MainActivity">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_back"
+    <com.actor.myandroidframework.widget.LineView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:lvGradientCenterColor="#EDF6FF"
+        app:lvGradientEndColor="#8DCDFB"
+        app:lvGradientStartColor="#F1F7FF"
+        app:lvOrientation="bottomLeft2TopRight" />
+
+    <com.actor.myandroidframework.widget.StatusBarHeightView
+        android:id="@+id/status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/bg_main" />
-
-    <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_study_20250421"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="去学习(20250421)"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:transitionName="@string/transition_name_study"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6"
-        app:shape_radius="5dp"
-        app:shape_solidColor="@color/green_14B9C8" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar"
+        app:srcCompat="@drawable/logo" />
 
-    <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_exam_20250421"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="去测试(20250421)"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:transitionName="@string/transition_name_exam"
+        android:text="交通安全基层站队 QHSE 标准化建设"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stv_study_20250421"
-        app:layout_constraintWidth_percent="0.6"
-        app:shape_radius="5dp"
-        app:shape_solidColor="@color/blue_5ECCFD" />
+        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
-    <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_study_20260712"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:text="去学习(20260712)"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:transitionName="@string/transition_name_study"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintVertical_bias="0.78"
-        app:shape_radius="5dp"
-        app:shape_solidColor="@color/green_14B9C8" />
-
-    <com.hjq.shape.view.ShapeTextView
-        android:id="@+id/stv_exam_20260712"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="去测试(20260712)"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:transitionName="@string/transition_name_exam"
+        android:text="应知应会题库"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stv_study_20260712"
-        app:layout_constraintWidth_percent="0.6"
-        app:shape_radius="5dp"
-        app:shape_solidColor="@color/blue_5ECCFD" />
+        app:layout_constraintTop_toBottomOf="@id/tv0" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="（驾驶员）"
+        android:textColor="#5C7EA2"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        android:padding="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/tv3"
+        app:layout_constraintTop_toBottomOf="@id/tv2"
+        tools:listitem="@layout/item_main" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="西南油气田分公司"
+        android:textColor="#383C47"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/nbhv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.actor.cnpc_qhse_exams.global.NavigationBarHeightView
+        android:id="@+id/nbhv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
