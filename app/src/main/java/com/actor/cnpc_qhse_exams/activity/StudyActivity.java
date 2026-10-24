@@ -41,11 +41,18 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
     private final StudyAdapter mAdapter = new StudyAdapter();
     private final int          SIZE     = 10;
     private long version;
+    private boolean isStudyAll;
     private List<String> chapters;
 
-    public static void start(BaseActivity<?> activity, View v, long version, List<String> chapters) {
+    /**
+     * @param version 版本
+     * @param isStudyAll 是否学习全部, if true, 会忽略 ↓ 章节列表
+     * @param chapters 章节列表
+     */
+    public static void start(BaseActivity<?> activity, View v, long version, boolean isStudyAll, List<String> chapters) {
         activity.startActivity(new Intent(activity, StudyActivity.class)
                 .putExtra(Global.VERSION, version)
+                .putExtra(Global.IS_STUDY_ALL, isStudyAll)
                 .putExtra(Global.CHAPTER, GsonUtils.toJson(chapters)), v);
     }
 
@@ -54,10 +61,13 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         version = intent.getLongExtra(Global.VERSION, -1L);
-        String json = intent.getStringExtra(Global.CHAPTER);
-        chapters = GsonUtils.fromJson(json, GsonUtils.getListType(String.class));
+        isStudyAll = intent.getBooleanExtra(Global.IS_STUDY_ALL, false);
+        if (!isStudyAll) {
+            String json = intent.getStringExtra(Global.CHAPTER);
+            chapters = GsonUtils.fromJson(json, GsonUtils.getListType(String.class));
+        }
         //if没有章节类型
-        if (chapters.isEmpty()) {
+        if (chapters == null || chapters.isEmpty()) {
             viewBinding.bsChapters.setVisibility(View.INVISIBLE);
         } else viewBinding.bsChapters.setData(chapters);
 
@@ -116,7 +126,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
         String subject = null;
         if (editable != null) subject = editable.toString().trim();
         //章节
-        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
+        int chapter = isStudyAll ? -2 : viewBinding.bsChapters.getSelectedItemPosition();
         int subType = viewBinding.bsTypes.getSelectedItemPosition();
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(version, subject, chapter, subType, page, SIZE);
@@ -135,7 +145,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
      */
     private void judgePermissionAndShowWindow() {
         if (XXPermissions.isGranted(this, Permission.SYSTEM_ALERT_WINDOW)) {
-            new EasyWindowSubjects(version, chapters).show();
+            new EasyWindowSubjects(version, isStudyAll, chapters).show();
         } else {
             new ConfirmDialog(this, "权限申请说明",
                     "显示悬浮窗需要申请权限, 否则不能显示到其它应用上.",
@@ -146,7 +156,7 @@ public class StudyActivity extends BaseActivity<ActivityStudyBinding> {
                         .request(new OnPermissionCallback() {
                             @Override
                             public void onGranted(@NonNull List<String> permissions, boolean allGranted) {
-                                new EasyWindowSubjects(version, chapters).show();
+                                new EasyWindowSubjects(version, isStudyAll, chapters).show();
                             }
                             @Override
                             public void onDenied(@NonNull List<String> permissions, boolean doNotAskAgain) {

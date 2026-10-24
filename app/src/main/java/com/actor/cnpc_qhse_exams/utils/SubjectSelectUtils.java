@@ -57,7 +57,7 @@ public class SubjectSelectUtils {
              * @see SubjectDriver#chapterType
              */
             CONDS.add(SubjectDriverDao.Properties.ChapterType.between(1, 7));
-        } else {
+        } else if (chapter >= -1) { //第2/3次试题没有章节
             CONDS.add(SubjectDriverDao.Properties.ChapterType.eq(chapter));
         }
         //if选择了类型

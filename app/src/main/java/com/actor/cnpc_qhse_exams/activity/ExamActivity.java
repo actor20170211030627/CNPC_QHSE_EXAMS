@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class ExamActivity extends BaseActivity<ActivityExamBinding> {
 
-    private int position = 0, dataSize = 0;
     private boolean isPlayVoice = true;
 
     // TODO: 2026/4/11 弄个错题本
@@ -58,27 +57,26 @@ public class ExamActivity extends BaseActivity<ActivityExamBinding> {
             }).show();
         });
         viewBinding.stvPre.setOnClickListener(v -> {
-            if (position <= 0) {
+            int currentItem = viewBinding.viewPager2.getCurrentItem();
+            if (currentItem <= 0) {
                 ToasterUtils.warning("没有上一题了");
             } else {
-                position --;
-                viewBinding.viewPager2.setCurrentItem(position);
+                viewBinding.viewPager2.setCurrentItem(-- currentItem);
             }
         });
         viewBinding.stvNext.setOnClickListener(v -> {
-            if (position >= dataSize - 1) {
+            int currentItem = viewBinding.viewPager2.getCurrentItem();
+            if (currentItem >= mAdapter.getData().size() - 1) {
                 ToasterUtils.warning("没有下一题了");
             } else {
-                position ++;
-                viewBinding.viewPager2.setCurrentItem(position);
+                viewBinding.viewPager2.setCurrentItem(++ currentItem);
             }
         });
 
         viewBinding.viewPager2.setAdapter(mAdapter);
         //禁止用户左右滑动
-        viewBinding.viewPager2.setUserInputEnabled(false);
+//        viewBinding.viewPager2.setUserInputEnabled(false);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.select(version, null, chapter, type);
-        dataSize = subjectDrivers.size();
         mAdapter.setList(subjectDrivers);
     }
 }

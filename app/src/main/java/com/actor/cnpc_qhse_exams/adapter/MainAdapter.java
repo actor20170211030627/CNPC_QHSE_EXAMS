@@ -50,7 +50,7 @@ public class MainAdapter extends BaseQuickAdapter<SubjectDriver, BaseViewHolder>
             if (!chapters.isEmpty()) chapters.add(0, array[0]);   //全部
 
             if (id == R.id.stv_study) {
-                StudyActivity.start(activity, view, version, chapters);
+                StudyActivity.start(activity, view, version, false, chapters);
             } else if (id == R.id.stv_exam) {
                 new ChapterTypeSettingDialog(activity, version, chapters, (version1, chapter, type) -> {
                     ExamActivity.start(activity, view, version1, chapter, type);

@@ -39,7 +39,7 @@ public class SubjectDriver {
 
     /**
      * 章节类型: 1~7
-     * -1: 没有章节，第2版本添加的题目全部 = -1
+     * -1: 没有章节，第2/3版本添加的题目全部 = -1
      * 0 : 全部章节，{@link com.actor.cnpc_qhse_exams.utils.SubjectSelectUtils#selectPage(String, int, int, int, int)}
      * 1~7：正常章节
      *

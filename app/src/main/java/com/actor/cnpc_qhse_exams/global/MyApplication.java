@@ -31,8 +31,8 @@ public class MyApplication extends ActorApplication {
         DBVersionDao dao = GreenDaoUtils.getDaoSession().getDBVersionDao();
         DBVersion dbVersion = GreenDaoUtils.queryMaxUnique(dao, DBVersionDao.Properties.VersionCode);
 
-        //每一个版本都重新copy一次数据库
-        if (dbVersion != null && AppUtils.getAppVersionCode() < dbVersion.getVersionCode()) {
+        //每一个版本都重新copy一次数据库                  注意: ↓ 是大于">"
+        if (dbVersion != null && AppUtils.getAppVersionCode() > dbVersion.getVersionCode()) {
             boolean isClosed = GreenDaoUtils.closeDatabase(dbName);
             if (isClosed) {
                 AssetsUtils.copyFile2InternalDbsDir(true, dbName);

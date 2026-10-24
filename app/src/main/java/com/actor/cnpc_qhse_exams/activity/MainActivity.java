@@ -43,6 +43,11 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //学习全部
+        viewBinding.stvStudyAll.setOnClickListener(v -> {
+            StudyActivity.start(this, v, -1, true, new ArrayList<>(0));
+        });
+
         SubjectDriverDao dao = GreenDaoUtils.getDaoSession().getSubjectDriverDao();
         List<SubjectDriver> subjectDrivers = groupBy(dao, SubjectDriverDao.Properties.Version);
         viewBinding.recyclerView.addItemDecoration(new BaseItemDecoration(0f, SizeUtils.dp2px(10f)));

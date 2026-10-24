@@ -63,8 +63,8 @@
             android:id="@+id/iv_subject_image"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:scaleType="fitCenter"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,14 +74,13 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_options"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:paddingBottom="8dp"
             android:textColor="@color/gray_666"
             android:textSize="17sp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_subject_image"
             tools:text="（A）马路；\n
 （B）铁路；\n
@@ -92,10 +91,11 @@
             android:id="@+id/iv_option_a"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="100dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@id/iv_option_b"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintStart_toEndOf="@id/tv_options"
+            app:layout_constraintStart_toStartOf="@id/tv_options"
             app:layout_constraintTop_toTopOf="@id/tv_options"
             tools:src="@drawable/icon_setting" />
 
@@ -125,6 +125,7 @@
             android:id="@+id/iv_option_d"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="@id/tv_options"
             app:layout_constraintDimensionRatio="1"

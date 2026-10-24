@@ -3,6 +3,7 @@ package com.actor.cnpc_qhse_exams.global;
 public class Global {
 
     public static final String VERSION         = "VERSION";
+    public static final String IS_STUDY_ALL    = "IS_STUDY_ALL";
     public static final String CHAPTER         = "CHAPTER";
     public static final String TYPE            = "TYPE";
     public static final String IS_CHECK_UPDATE = "IS_CHECK_UPDATE";

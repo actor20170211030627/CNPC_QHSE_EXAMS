@@ -18,8 +18,8 @@ android {
         minSdk 24
         targetSdk 33
         //noinspection HighAppVersionCode
-        versionCode 2026102301
-        versionName "1.6"
+        versionCode 2026102402
+        versionName "1.6.1"
     }
 
     compileOptions {

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.actor.cnpc_qhse_exams.R;
 import com.actor.cnpc_qhse_exams.adapter.StudyAdapter;
@@ -40,18 +41,24 @@ import java.util.List;
  */
 public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implements OnWindowViewClickListener<View> {
 
-    private long version;
+    private final long         version;
+    private final boolean      isStudyAll;
     private final StudyAdapter mAdapter = new StudyAdapter();
     private final int          SIZE     = 10;
     private final EasyWindowSubjectsBinding viewBinding;
     private final int[] offsets = {-1, -1};
 
-
-    public EasyWindowSubjects(long version, List<String> chapters) {
+    /**
+     * @param version 版本
+     * @param isStudyAll 是否学习全部, if true, 会忽略 ↓ 章节列表
+     * @param chapters 章节列表
+     */
+    public EasyWindowSubjects(long version, boolean isStudyAll, @Nullable List<String> chapters) {
         //会导致 ShapeEditText 点击没反应
         super(ConfigUtils.APPLICATION);
 //        super(getContextThemeWrapper(ConfigUtils.APPLICATION));
         this.version = version;
+        this.isStudyAll = isStudyAll;
 
         Context contextThemeWrapper = getContextThemeWrapper(ConfigUtils.APPLICATION);
 
@@ -114,7 +121,7 @@ public class EasyWindowSubjects extends EasyWindow<EasyWindowSubjects> implement
         String subject = null;
         if (editable != null) subject = editable.toString().trim();
         //章节
-        int chapter = viewBinding.bsChapters.getSelectedItemPosition();
+        int chapter = isStudyAll ? -2 : viewBinding.bsChapters.getSelectedItemPosition();
         int subType = viewBinding.bsTypes.getSelectedItemPosition();
         int page = BRVUtils.getPage(mAdapter, isRefresh, SIZE);
         List<SubjectDriver> subjectDrivers = SubjectSelectUtils.selectPage(version, subject, chapter, subType, page, SIZE);
