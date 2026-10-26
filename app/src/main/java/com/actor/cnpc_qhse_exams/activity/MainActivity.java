@@ -16,7 +16,7 @@ import com.actor.cnpc_qhse_exams.global.Global;
 import com.actor.database.greendao.GreenDaoUtils;
 import com.actor.myandroidframework.recyclerview.BaseItemDecoration;
 import com.actor.myandroidframework.utils.LogUtils;
-import com.actor.myandroidframework.utils.MMKVUtils;
+import com.actor.myandroidframework.utils.SPUtils;
 import com.actor.myandroidframework.utils.toaster.ToasterUtils;
 import com.actor.pgyer.PgyerApi20Utils;
 import com.actor.pgyer.bean.AppCheckBean;
@@ -25,7 +25,6 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.greendao.gen.SubjectDriverDao;
 import com.hjq.http.EasyHttp;
 import com.hjq.http.listener.OnHttpListener;
-import com.tencent.mmkv.MMKV;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
@@ -53,12 +52,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         viewBinding.recyclerView.addItemDecoration(new BaseItemDecoration(0f, SizeUtils.dp2px(10f)));
         viewBinding.recyclerView.setAdapter(new MainAdapter(this, subjectDrivers));
 
-        if (!MMKVUtils.getBoolean(Global.IS_CHECK_UPDATE)) {
+        if (!SPUtils.getBoolean(Global.IS_CHECK_UPDATE, false)) {
             PgyerApi20Utils.init(Global.API_KEY, Global.APP_KEY);
             PgyerApi20Utils.appCheck(this, AppUtils.getAppVersionName(), null, new OnHttpListener<AppCheckBean.AppCheckResponse>() {
                 @Override
                 public void onHttpSuccess(@NonNull AppCheckBean.AppCheckResponse result) {
-                    MMKVUtils.putBoolean(Global.IS_CHECK_UPDATE, true, MMKV.ExpireInDay);
+                    SPUtils.putBoolean(Global.IS_CHECK_UPDATE, true, SPUtils.ExpireInDay);
                     if (result.isSuccess()) {
                         if (result.data == null) return;
                         if (result.data.buildHaveNewVersion || result.data.buildVersionNo > AppUtils.getAppVersionCode()) {
